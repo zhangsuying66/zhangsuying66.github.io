@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>python操作excel | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="excel格式:https:&#x2F;&#x2F;www.cnblogs.com&#x2F;fkissx&#x2F;p&#x2F;5617630.html 1. 类库xlwt&#x2F;xlrd">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python操作excel">
+<meta property="og:url" content="http://example.com/2019/03/04/python%E5%9F%BA%E7%A1%80/20190304_%E6%93%8D%E4%BD%9Cexcel/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="excel格式:https:&#x2F;&#x2F;www.cnblogs.com&#x2F;fkissx&#x2F;p&#x2F;5617630.html 1. 类库xlwt&#x2F;xlrd">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-03-04T07:24:20.000Z">
+<meta property="article:modified_time" content="2020-10-17T03:28:37.000Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="python基础">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-python基础/20190304_操作excel" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2019/03/04/python%E5%9F%BA%E7%A1%80/20190304_%E6%93%8D%E4%BD%9Cexcel/" class="article-date">
+  <time class="dt-published" datetime="2019-03-04T07:24:20.000Z" itemprop="datePublished">2019-03-04</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/python/">python</a>►<a class="article-category-link" href="/categories/python/python%E5%9F%BA%E7%A1%80/">python基础</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      python操作excel
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>excel格式:<a target="_blank" rel="noopener" href="https://www.cnblogs.com/fkissx/p/5617630.html">https://www.cnblogs.com/fkissx/p/5617630.html</a></p>
+<h4 id="1-类库xlwt-xlrd"><a href="#1-类库xlwt-xlrd" class="headerlink" title="1. 类库xlwt/xlrd"></a>1. 类库xlwt/xlrd</h4><span id="more"></span>
+<ul>
+<li>用于生成和读取比较老的excel文件，比如xls格式，最大限制为65535行；</li>
+<li>文档地址：<a target="_blank" rel="noopener" href="https://xlwt.readthedocs.io/en/latest/index.html">https://xlwt.readthedocs.io/en/latest/index.html</a></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">columns = [<span class="string">&#x27;日期&#x27;</span>, <span class="string">&#x27;PV&#x27;</span>, <span class="string">&#x27;UV&#x27;</span>, <span class="string">&#x27;name&#x27;</span>]</span><br><span class="line">datas = [</span><br><span class="line">    [<span class="string">&#x27;2019-07-15&#x27;</span>, <span class="string">&#x27;16000&#x27;</span>, <span class="string">&#x27;150&#x27;</span>, <span class="string">&#x27;Andy&#x27;</span>],</span><br><span class="line">    [<span class="string">&#x27;2020-02-15&#x27;</span>, <span class="string">&#x27;9000&#x27;</span>, <span class="string">&#x27;70&#x27;</span>, <span class="string">&#x27;李&#x27;</span>],</span><br><span class="line">    [<span class="string">&#x27;2015-07-15&#x27;</span>, <span class="string">&#x27;6000&#x27;</span>, <span class="string">&#x27;50&#x27;</span>, <span class="string">&#x27;张&#x27;</span>],</span><br><span class="line">    [<span class="string">&#x27;2020-01-15&#x27;</span>, <span class="string">&#x27;12000&#x27;</span>, <span class="string">&#x27;80&#x27;</span>, <span class="string">&#x27;刘&#x27;</span>],</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> xlwt</span><br><span class="line">workbook = xlwt.Workbook(encoding=<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">sheet = workbook.add_sheet(<span class="string">&#x27;puvn_sheet&#x27;</span>)</span><br><span class="line"><span class="comment"># 写入标题</span></span><br><span class="line"><span class="keyword">for</span> col, columns <span class="keyword">in</span> <span class="built_in">enumerate</span>(columns):</span><br><span class="line">    sheet.write(<span class="number">0</span>, col, columns)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 写入每一行</span></span><br><span class="line"><span class="keyword">for</span> row, data <span class="keyword">in</span> <span class="built_in">enumerate</span>(datas):</span><br><span class="line">    <span class="keyword">for</span> col, columns_data <span class="keyword">in</span> <span class="built_in">enumerate</span>(data):</span><br><span class="line">        sheet.write(row + <span class="number">1</span>, col, columns_data)</span><br><span class="line"></span><br><span class="line">workbook.save(<span class="string">&#x27;puvn_sheet.xls&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="2-类库openpyxl"><a href="#2-类库openpyxl" class="headerlink" title="2. 类库openpyxl"></a>2. 类库openpyxl</h4><ul>
+<li>用于生成2010之后新的excel文件，比如xlsx格式；</li>
+<li>文档地址：<a target="_blank" rel="noopener" href="https://openpyxl.readthedocs.io/en/stable/">https://openpyxl.readthedocs.io/en/stable/</a></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">columns = [<span class="string">&#x27;日期&#x27;</span>, <span class="string">&#x27;PV&#x27;</span>, <span class="string">&#x27;UV&#x27;</span>, <span class="string">&#x27;name&#x27;</span>]</span><br><span class="line">datas = [</span><br><span class="line">    [<span class="string">&#x27;2019-07-15&#x27;</span>, <span class="string">&#x27;16000&#x27;</span>, <span class="string">&#x27;150&#x27;</span>, <span class="string">&#x27;Andy&#x27;</span>],</span><br><span class="line">    [<span class="string">&#x27;2020-02-15&#x27;</span>, <span class="string">&#x27;9000&#x27;</span>, <span class="string">&#x27;70&#x27;</span>, <span class="string">&#x27;李&#x27;</span>],</span><br><span class="line">    [<span class="string">&#x27;2015-07-15&#x27;</span>, <span class="string">&#x27;6000&#x27;</span>, <span class="string">&#x27;50&#x27;</span>, <span class="string">&#x27;张&#x27;</span>],</span><br><span class="line">    [<span class="string">&#x27;2020-01-15&#x27;</span>, <span class="string">&#x27;12000&#x27;</span>, <span class="string">&#x27;80&#x27;</span>, <span class="string">&#x27;刘&#x27;</span>],</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> openpyxl <span class="keyword">import</span> Workbook</span><br><span class="line">wk = Workbook()</span><br><span class="line"><span class="comment"># 默认sheet</span></span><br><span class="line">sheet = wk.active</span><br><span class="line">sheet.title = <span class="string">&#x27;默认sheet&#x27;</span></span><br><span class="line">sheet.append(columns)</span><br><span class="line"><span class="keyword">for</span> data <span class="keyword">in</span> datas:</span><br><span class="line">    sheet.append(data)</span><br><span class="line"></span><br><span class="line">wk.save(<span class="string">&#x27;openpyxl.xlsx&#x27;</span>)  <span class="comment"># xls和xlsx均可</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="3-类库pandas"><a href="#3-类库pandas" class="headerlink" title="3. 类库pandas"></a>3. 类库pandas</h4><ul>
+<li>pandas是最强大的数据分析库，自带python读取和生成模块；</li>
+<li>文档地址：<a target="_blank" rel="noopener" href="https://pandas.pydata.org/">https://pandas.pydata.org/</a></li>
+</ul>
+<p>使用的是：pandas.DataFrame.to_excel</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2019/03/04/python%E5%9F%BA%E7%A1%80/20190304_%E6%93%8D%E4%BD%9Cexcel/" data-id="ckqd7wfux001vogtg3ivu04pa" data-title="python操作excel" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python%E5%9F%BA%E7%A1%80/" rel="tag">python基础</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/03/05/python%E5%9F%BA%E7%A1%80/20190305_%E5%9B%BE%E5%BD%A2%E7%95%8C%E9%9D%A2/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          python图形界面
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/03/03/python%E5%9F%BA%E7%A1%80/20190303_sqlchemy%E7%9A%84%E4%BD%BF%E7%94%A8/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">sqlalchemy的使用</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/python/fastapi/">fastapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/flask/">flask</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/python%E5%9F%BA%E7%A1%80/">python基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/python%E6%A1%88%E4%BE%8B/">python案例</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/">爬虫</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/pyppeteer/">pyppeteer</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/scrapy/">scrapy</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/selenium/">selenium</a></li></ul></li></ul></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/fastapi/" rel="tag">fastapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/flask/" rel="tag">flask</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pyppeteer/" rel="tag">pyppeteer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python3/" rel="tag">python3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python%E5%9F%BA%E7%A1%80/" rel="tag">python基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python%E6%A1%88%E4%BE%8B/" rel="tag">python案例</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scrapy/" rel="tag">scrapy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/selenium/" rel="tag">selenium</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%A3%E7%A0%81%E9%9B%A8/" rel="tag">代码雨</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8D%E7%88%AC/" rel="tag">反爬</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/fastapi/" style="font-size: 10px;">fastapi</a> <a href="/tags/flask/" style="font-size: 10px;">flask</a> <a href="/tags/pyppeteer/" style="font-size: 12px;">pyppeteer</a> <a href="/tags/python/" style="font-size: 18px;">python</a> <a href="/tags/python3/" style="font-size: 10px;">python3</a> <a href="/tags/python%E5%9F%BA%E7%A1%80/" style="font-size: 20px;">python基础</a> <a href="/tags/python%E6%A1%88%E4%BE%8B/" style="font-size: 12px;">python案例</a> <a href="/tags/scrapy/" style="font-size: 14px;">scrapy</a> <a href="/tags/selenium/" style="font-size: 12px;">selenium</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E9%9B%A8/" style="font-size: 10px;">代码雨</a> <a href="/tags/%E5%8F%8D%E7%88%AC/" style="font-size: 10px;">反爬</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 16px;">爬虫</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/06/26/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/02/my_application/20201202_%E5%B0%86excel%E4%B8%AD%E7%9A%84%E5%86%85%E5%AE%B9%E5%AD%98%E5%85%A5mysql/">将excel中的内容存入mysql</a>
+          </li>
+        
+          <li>
+            <a href="/2020/10/15/my_application/20201015_%E4%BB%A3%E7%A0%81%E9%9B%A8/">用python实现代码雨（电影黑客帝国里的效果，代码可直接运行）</a>
+          </li>
+        
+          <li>
+            <a href="/2020/09/29/spider/20200929_%E4%B8%89%E7%A7%8D%E5%8A%A0%E5%AF%86%E6%96%B9%E5%BC%8F/">三种加密方式 sha1加密、MD5加密、Base64加密 (附H5源码和js源码)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/07/15/spider/scrapy/20200715_%20ajaxcrawl/">scrapy源码12 - ajaxcrawl</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

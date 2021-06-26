@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>python错误，测试和调试 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="try语句处理异常，是这样做的： 首选，try子语句（try和except关键字之间的语句）会被执行。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python错误，测试和调试">
+<meta property="og:url" content="http://example.com/2019/02/19/python%E5%9F%BA%E7%A1%80/20190219_%E9%94%99%E8%AF%AF,%E6%B5%8B%E8%AF%95%E5%92%8C%E8%B0%83%E8%AF%95/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="try语句处理异常，是这样做的： 首选，try子语句（try和except关键字之间的语句）会被执行。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-02-19T07:24:20.000Z">
+<meta property="article:modified_time" content="2020-10-17T03:26:46.000Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="python基础">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-python基础/20190219_错误,测试和调试" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2019/02/19/python%E5%9F%BA%E7%A1%80/20190219_%E9%94%99%E8%AF%AF,%E6%B5%8B%E8%AF%95%E5%92%8C%E8%B0%83%E8%AF%95/" class="article-date">
+  <time class="dt-published" datetime="2019-02-19T07:24:20.000Z" itemprop="datePublished">2019-02-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/python/">python</a>►<a class="article-category-link" href="/categories/python/python%E5%9F%BA%E7%A1%80/">python基础</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      python错误，测试和调试
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>try语句处理异常，是这样做的：</p>
+<p>首选，try子语句（try和except关键字之间的语句）会被执行。</p>
+<span id="more"></span>
+
+<p>如果没有异常发生，except 子句被略过。</p>
+<p>如果有异常发生，try后面的其他语句就被跳过了，如果异常类型在except关键字后匹配，这个except子句被执行。</p>
+<p>如果没有异常发生，else子句就会被执行。else的作用是它避免了捕获未保护的代码所发起的异常。</p>
+<p>finally子语会在try子句执行完毕之前执行，不管是否发生或者不发生异常。当一个异常发生在try子句中却未被处理时（或者发生在except或者else子句中时），finally子句执行完后会再次抛出异常。</p>
+<h4 id="实战：编写“角色扮演”游戏"><a href="#实战：编写“角色扮演”游戏" class="headerlink" title="实战：编写“角色扮演”游戏"></a>实战：编写“角色扮演”游戏</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="comment"># 自定义异常类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MuchError</span>(<span class="params">Exception</span>):</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Victory</span>(<span class="params">Exception</span>):</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义玩家与角色</span></span><br><span class="line">player = [<span class="string">&#x27;小黄&#x27;</span>, <span class="string">&#x27;小黑&#x27;</span>, <span class="string">&#x27;小白&#x27;</span>, <span class="string">&#x27;小红&#x27;</span>]</span><br><span class="line">role = [<span class="string">&#x27;女巫&#x27;</span>, <span class="string">&#x27;猎人&#x27;</span>, <span class="string">&#x27;狼人&#x27;</span>, <span class="string">&#x27;村民&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;守卫&#x27;</span>, <span class="string">&#x27;长老&#x27;</span>, <span class="string">&#x27;预言家&#x27;</span>, <span class="string">&#x27;白狼王&#x27;</span>]</span><br><span class="line"><span class="comment"># 将玩家与角色的顺序打乱并匹配</span></span><br><span class="line">player = random.sample(player, <span class="built_in">len</span>(player))</span><br><span class="line">role = random.sample(role, <span class="built_in">len</span>(player))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;游戏中全部身份有：&#x27;</span> + <span class="string">&#x27;、&#x27;</span>.join(role))</span><br><span class="line">matching = &#123;&#125;</span><br><span class="line"><span class="keyword">for</span> t <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(player)):</span><br><span class="line">    matching[player[t]] = role[t]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 游戏逻辑</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    result, err = <span class="number">0</span>, <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> t <span class="keyword">in</span> player:</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">2</span>):</span><br><span class="line">            guess = <span class="built_in">input</span>(<span class="string">&#x27;你认为&#x27;</span> + t + <span class="string">&#x27;的身份是：&#x27;</span>)</span><br><span class="line">            <span class="keyword">if</span> guess == matching[t]:</span><br><span class="line">                result += <span class="number">1</span></span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&#x27;你猜对了&#x27;</span>)</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                err += <span class="number">1</span></span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&#x27;猜错了，你还有&#x27;</span>+ <span class="built_in">str</span>(<span class="number">1</span>-i) + <span class="string">&#x27;次机会&#x27;</span>)</span><br><span class="line">        <span class="keyword">if</span> err &gt; <span class="number">5</span>:</span><br><span class="line">            <span class="keyword">raise</span> MuchError(<span class="string">&#x27;错误次数已超出5次，游戏结束&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> result == <span class="built_in">len</span>(player):</span><br><span class="line">        <span class="keyword">raise</span> Victory(<span class="string">&#x27;恭喜你，全部猜对了&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">except</span> MuchError <span class="keyword">as</span> errInfo:</span><br><span class="line">    <span class="built_in">print</span>(errInfo)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2019/02/19/python%E5%9F%BA%E7%A1%80/20190219_%E9%94%99%E8%AF%AF,%E6%B5%8B%E8%AF%95%E5%92%8C%E8%B0%83%E8%AF%95/" data-id="ckqd7wfui000pogtg6d3x31qx" data-title="python错误，测试和调试" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python%E5%9F%BA%E7%A1%80/" rel="tag">python基础</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/02/20/python%E5%9F%BA%E7%A1%80/20190220_%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          python面向对象编程
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/02/18/python%E5%9F%BA%E7%A1%80/20190218_%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">python函数式编程</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/python/fastapi/">fastapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/flask/">flask</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/python%E5%9F%BA%E7%A1%80/">python基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/python%E6%A1%88%E4%BE%8B/">python案例</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/">爬虫</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/pyppeteer/">pyppeteer</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/scrapy/">scrapy</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/selenium/">selenium</a></li></ul></li></ul></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/fastapi/" rel="tag">fastapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/flask/" rel="tag">flask</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pyppeteer/" rel="tag">pyppeteer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python3/" rel="tag">python3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python%E5%9F%BA%E7%A1%80/" rel="tag">python基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python%E6%A1%88%E4%BE%8B/" rel="tag">python案例</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scrapy/" rel="tag">scrapy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/selenium/" rel="tag">selenium</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%A3%E7%A0%81%E9%9B%A8/" rel="tag">代码雨</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8D%E7%88%AC/" rel="tag">反爬</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/fastapi/" style="font-size: 10px;">fastapi</a> <a href="/tags/flask/" style="font-size: 10px;">flask</a> <a href="/tags/pyppeteer/" style="font-size: 12px;">pyppeteer</a> <a href="/tags/python/" style="font-size: 18px;">python</a> <a href="/tags/python3/" style="font-size: 10px;">python3</a> <a href="/tags/python%E5%9F%BA%E7%A1%80/" style="font-size: 20px;">python基础</a> <a href="/tags/python%E6%A1%88%E4%BE%8B/" style="font-size: 12px;">python案例</a> <a href="/tags/scrapy/" style="font-size: 14px;">scrapy</a> <a href="/tags/selenium/" style="font-size: 12px;">selenium</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E9%9B%A8/" style="font-size: 10px;">代码雨</a> <a href="/tags/%E5%8F%8D%E7%88%AC/" style="font-size: 10px;">反爬</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 16px;">爬虫</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/06/26/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/02/my_application/20201202_%E5%B0%86excel%E4%B8%AD%E7%9A%84%E5%86%85%E5%AE%B9%E5%AD%98%E5%85%A5mysql/">将excel中的内容存入mysql</a>
+          </li>
+        
+          <li>
+            <a href="/2020/10/15/my_application/20201015_%E4%BB%A3%E7%A0%81%E9%9B%A8/">用python实现代码雨（电影黑客帝国里的效果，代码可直接运行）</a>
+          </li>
+        
+          <li>
+            <a href="/2020/09/29/spider/20200929_%E4%B8%89%E7%A7%8D%E5%8A%A0%E5%AF%86%E6%96%B9%E5%BC%8F/">三种加密方式 sha1加密、MD5加密、Base64加密 (附H5源码和js源码)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/07/15/spider/scrapy/20200715_%20ajaxcrawl/">scrapy源码12 - ajaxcrawl</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

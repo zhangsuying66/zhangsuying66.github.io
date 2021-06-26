@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>scrapy源码4：spidermw的源码分析 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="spidermw的源码分析如下:">
+<meta property="og:type" content="article">
+<meta property="og:title" content="scrapy源码4：spidermw的源码分析">
+<meta property="og:url" content="http://example.com/2020/07/04/spider/scrapy/20200704_%20spidermw/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="spidermw的源码分析如下:">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-07-04T02:35:00.000Z">
+<meta property="article:modified_time" content="2020-10-23T08:54:02.000Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="爬虫">
+<meta property="article:tag" content="scrapy">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-spider/scrapy/20200704_ spidermw" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2020/07/04/spider/scrapy/20200704_%20spidermw/" class="article-date">
+  <time class="dt-published" datetime="2020-07-04T02:35:00.000Z" itemprop="datePublished">2020-07-04</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/python/">python</a>►<a class="article-category-link" href="/categories/python/%E7%88%AC%E8%99%AB/">爬虫</a>►<a class="article-category-link" href="/categories/python/%E7%88%AC%E8%99%AB/scrapy/">scrapy</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      scrapy源码4：spidermw的源码分析
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>spidermw的源码分析如下:</p>
+<span id="more"></span>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> six</span><br><span class="line"><span class="keyword">from</span> twisted.python.failure <span class="keyword">import</span> Failure</span><br><span class="line"><span class="comment"># 导入six包和导入failure</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> scrapy.middleware <span class="keyword">import</span> MiddlewareManager</span><br><span class="line"><span class="comment"># 这里导入了一个中间件管理的基类，应该适用于后续的继承的吧。 </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> scrapy.utils.defer <span class="keyword">import</span> mustbe_deferred</span><br><span class="line"><span class="keyword">from</span> scrapy.utils.conf <span class="keyword">import</span> build_component_list</span><br><span class="line"><span class="comment"># 这里从defer里面和conf里面导入2个方法。 先看看具体实现方法吧。 </span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">mustbe_deferred</span>(<span class="params">f, *args, **kw</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;Same as twisted.internet.defer.maybeDeferred, but delay calling</span></span><br><span class="line"><span class="string">    callback/errback to next reactor loop</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        result = f(*args, **kw)</span><br><span class="line">    <span class="comment"># <span class="doctag">FIXME:</span> Hack to avoid introspecting tracebacks. This to speed up</span></span><br><span class="line">    <span class="comment"># processing of IgnoreRequest errors which are, by far, the most common</span></span><br><span class="line">    <span class="comment"># exception in Scrapy - see #125</span></span><br><span class="line">    <span class="keyword">except</span> IgnoreRequest <span class="keyword">as</span> e:</span><br><span class="line">        <span class="keyword">return</span> defer_fail(failure.Failure(e))</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">return</span> defer_fail(failure.Failure())</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> defer_result(result)</span><br><span class="line"><span class="comment"># 这个方法有点类似于defer_result 的意思。 不管啥请求都是调用了defer_fail或者defer_result . 都等100ms完成读写。</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">build_component_list</span>(<span class="params">compdict, custom=<span class="literal">None</span>, convert=update_classpath</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;Compose a component list from a &#123; class: order &#125; dictionary.&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_check_components</span>(<span class="params">complist</span>):</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(&#123;convert(c) <span class="keyword">for</span> c <span class="keyword">in</span> complist&#125;) != <span class="built_in">len</span>(complist):</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">&#x27;Some paths in &#123;!r&#125; convert to the same object, &#x27;</span></span><br><span class="line">                             <span class="string">&#x27;please update your settings&#x27;</span>.<span class="built_in">format</span>(complist))</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_map_keys</span>(<span class="params">compdict</span>):</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">isinstance</span>(compdict, BaseSettings):</span><br><span class="line">            compbs = BaseSettings()</span><br><span class="line">            <span class="keyword">for</span> k, v <span class="keyword">in</span> six.iteritems(compdict):</span><br><span class="line">                prio = compdict.getpriority(k)</span><br><span class="line">                <span class="keyword">if</span> compbs.getpriority(convert(k)) == prio:</span><br><span class="line">                    <span class="keyword">raise</span> ValueError(<span class="string">&#x27;Some paths in &#123;!r&#125; convert to the same &#x27;</span></span><br><span class="line">                                     <span class="string">&#x27;object, please update your settings&#x27;</span></span><br><span class="line">                                     <span class="string">&#x27;&#x27;</span>.<span class="built_in">format</span>(<span class="built_in">list</span>(compdict.keys())))</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    compbs.<span class="built_in">set</span>(convert(k), v, priority=prio)</span><br><span class="line">            <span class="keyword">return</span> compbs</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            _check_components(compdict)</span><br><span class="line">            <span class="keyword">return</span> &#123;convert(k): v <span class="keyword">for</span> k, v <span class="keyword">in</span> six.iteritems(compdict)&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_validate_values</span>(<span class="params">compdict</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;Fail if a value in the components dict is not a real number or None.&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">for</span> name, value <span class="keyword">in</span> six.iteritems(compdict):</span><br><span class="line">            <span class="keyword">if</span> value <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span> <span class="keyword">not</span> <span class="built_in">isinstance</span>(value, numbers.Real):</span><br><span class="line">                <span class="keyword">raise</span> ValueError(<span class="string">&#x27;Invalid value &#123;&#125; for component &#123;&#125;, please provide &#x27;</span> \</span><br><span class="line">                                 <span class="string">&#x27;a real number or None instead&#x27;</span>.<span class="built_in">format</span>(value, name))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># BEGIN Backwards compatibility for old (base, custom) call signature</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">isinstance</span>(custom, (<span class="built_in">list</span>, <span class="built_in">tuple</span>)):</span><br><span class="line">        _check_components(custom)</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">type</span>(custom)(convert(c) <span class="keyword">for</span> c <span class="keyword">in</span> custom)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> custom <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">        compdict.update(custom)</span><br><span class="line">    <span class="comment"># END Backwards compatibility</span></span><br><span class="line"></span><br><span class="line">    _validate_values(compdict)</span><br><span class="line">    compdict = without_none_values(_map_keys(compdict))</span><br><span class="line">    <span class="keyword">return</span> [k <span class="keyword">for</span> k, v <span class="keyword">in</span> <span class="built_in">sorted</span>(six.iteritems(compdict), key=itemgetter(<span class="number">1</span>))]</span><br><span class="line"><span class="comment"># 这个方法真的长 啊， 内部嵌套了几个方法。 </span></span><br><span class="line"><span class="comment"># 我们把内部嵌套的几个方法都分析下吧。 </span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_check_components</span>(<span class="params">complist</span>):</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(&#123;convert(c) <span class="keyword">for</span> c <span class="keyword">in</span> complist&#125;) != <span class="built_in">len</span>(complist):</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">&#x27;Some paths in &#123;!r&#125; convert to the same object, &#x27;</span></span><br><span class="line">                             <span class="string">&#x27;please update your settings&#x27;</span>.<span class="built_in">format</span>(complist))</span><br><span class="line"><span class="comment"># 这个方法从名字上看是检查组件的。先判断下长度相等不， 如果不等就抛出异常了。 </span></span><br><span class="line"><span class="comment"># 判断过程中用到了convert方法， 发现这个方法有默认值的。也就是convert使用默认的update_classpath方法处理，我们定位过去看看。</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">update_classpath</span>(<span class="params">path</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;Update a deprecated path from an object with its new location&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">for</span> prefix, replacement <span class="keyword">in</span> DEPRECATION_RULES:</span><br><span class="line">        <span class="keyword">if</span> path.startswith(prefix):</span><br><span class="line">            new_path = path.replace(prefix, replacement, <span class="number">1</span>)</span><br><span class="line">            warnings.warn(<span class="string">&quot;`&#123;&#125;` class is deprecated, use `&#123;&#125;` instead&quot;</span>.<span class="built_in">format</span>(path, new_path),</span><br><span class="line">                          ScrapyDeprecationWarning)</span><br><span class="line">            <span class="keyword">return</span> new_path</span><br><span class="line">    <span class="keyword">return</span> path</span><br><span class="line"><span class="comment"># 这里有个规则啊 ，如果以旧的开头， 将他换成新的，然后提示一个警告信息。 返回新的路径。</span></span><br><span class="line"><span class="comment"># 规则我这里也粘贴过来吧。 </span></span><br><span class="line"></span><br><span class="line">DEPRECATION_RULES = [</span><br><span class="line">    (<span class="string">&#x27;scrapy.contrib_exp.downloadermiddleware.decompression.&#x27;</span>, <span class="string">&#x27;scrapy.downloadermiddlewares.decompression.&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;scrapy.contrib_exp.iterators.&#x27;</span>, <span class="string">&#x27;scrapy.utils.iterators.&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;scrapy.contrib.downloadermiddleware.&#x27;</span>, <span class="string">&#x27;scrapy.downloadermiddlewares.&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;scrapy.contrib.exporter.&#x27;</span>, <span class="string">&#x27;scrapy.exporters.&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;scrapy.contrib.linkextractors.&#x27;</span>, <span class="string">&#x27;scrapy.linkextractors.&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;scrapy.contrib.loader.processor.&#x27;</span>, <span class="string">&#x27;scrapy.loader.processors.&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;scrapy.contrib.loader.&#x27;</span>, <span class="string">&#x27;scrapy.loader.&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;scrapy.contrib.pipeline.&#x27;</span>, <span class="string">&#x27;scrapy.pipelines.&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;scrapy.contrib.spidermiddleware.&#x27;</span>, <span class="string">&#x27;scrapy.spidermiddlewares.&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;scrapy.contrib.spiders.&#x27;</span>, <span class="string">&#x27;scrapy.spiders.&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;scrapy.contrib.&#x27;</span>, <span class="string">&#x27;scrapy.extensions.&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;scrapy.command.&#x27;</span>, <span class="string">&#x27;scrapy.commands.&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;scrapy.dupefilter.&#x27;</span>, <span class="string">&#x27;scrapy.dupefilters.&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;scrapy.linkextractor.&#x27;</span>, <span class="string">&#x27;scrapy.linkextractors.&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;scrapy.telnet.&#x27;</span>, <span class="string">&#x27;scrapy.extensions.telnet.&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;scrapy.spider.&#x27;</span>, <span class="string">&#x27;scrapy.spiders.&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;scrapy.squeue.&#x27;</span>, <span class="string">&#x27;scrapy.squeues.&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;scrapy.statscol.&#x27;</span>, <span class="string">&#x27;scrapy.statscollectors.&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;scrapy.utils.decorator.&#x27;</span>, <span class="string">&#x27;scrapy.utils.decorators.&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;scrapy.spidermanager.SpiderManager&#x27;</span>, <span class="string">&#x27;scrapy.spiderloader.SpiderLoader&#x27;</span>),</span><br><span class="line">]</span><br><span class="line"><span class="comment"># 看完这个方法，我们就明白了上面的代码</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">_check_components</span>(<span class="params">complist</span>):</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(&#123;convert(c) <span class="keyword">for</span> c <span class="keyword">in</span> complist&#125;) != <span class="built_in">len</span>(complist):</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">&#x27;Some paths in &#123;!r&#125; convert to the same object, &#x27;</span></span><br><span class="line">                             <span class="string">&#x27;please update your settings&#x27;</span>.<span class="built_in">format</span>(complist))</span><br><span class="line">    <span class="comment"># 这个他判定长度不等的情况一般是有新的旧的设置，重复导致的。 让你检查你的设置。</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_map_keys</span>(<span class="params">compdict</span>):</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">isinstance</span>(compdict, BaseSettings):</span><br><span class="line">        compbs = BaseSettings()</span><br><span class="line">        <span class="keyword">for</span> k, v <span class="keyword">in</span> six.iteritems(compdict):</span><br><span class="line">            prio = compdict.getpriority(k)</span><br><span class="line">            <span class="keyword">if</span> compbs.getpriority(convert(k)) == prio:</span><br><span class="line">                <span class="keyword">raise</span> ValueError(<span class="string">&#x27;Some paths in &#123;!r&#125; convert to the same &#x27;</span></span><br><span class="line">                                    <span class="string">&#x27;object, please update your settings&#x27;</span></span><br><span class="line">                                    <span class="string">&#x27;&#x27;</span>.<span class="built_in">format</span>(<span class="built_in">list</span>(compdict.keys())))</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                compbs.<span class="built_in">set</span>(convert(k), v, priority=prio)</span><br><span class="line">        <span class="keyword">return</span> compbs</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        _check_components(compdict)</span><br><span class="line">        <span class="keyword">return</span> &#123;convert(k): v <span class="keyword">for</span> k, v <span class="keyword">in</span> six.iteritems(compdict)&#125;</span><br><span class="line"><span class="comment"># 这个判定下compdict是basesettings的子类， 如果是的话，构造一个basesettings， 遍历compdict</span></span><br><span class="line"><span class="comment"># 获取指定key的优先级prio, 如果优先级有相等的是要抛出异常的。其他情况下， 把优先级设置为compdict中指定的优先级。 </span></span><br><span class="line"><span class="comment"># 如果不是basesetting的子类。 就调用check_components去检查设置重复，然后返回一个dict对象。 </span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_validate_values</span>(<span class="params">compdict</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;Fail if a value in the components dict is not a real number or None.&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">for</span> name, value <span class="keyword">in</span> six.iteritems(compdict):</span><br><span class="line">        <span class="keyword">if</span> value <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span> <span class="keyword">not</span> <span class="built_in">isinstance</span>(value, numbers.Real):</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">&#x27;Invalid value &#123;&#125; for component &#123;&#125;, please provide &#x27;</span> \</span><br><span class="line">                                <span class="string">&#x27;a real number or None instead&#x27;</span>.<span class="built_in">format</span>(value, name))</span><br><span class="line">    <span class="comment"># 这个方法就是判定compdict里面value不是none或者real的话就抛出异常。 </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 几个内嵌的小方法看完了， 我们还是回到这个build_component_list 这个方法。 </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果custom是list,tuple的实例的话调用检查个数， 返回指定类对象。 这里返回一个list，或者元组。 </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果custome 不是none的话，就更新下comdict </span></span><br><span class="line"><span class="comment"># 验证下compdict,都是数值的。 </span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">without_none_values</span>(<span class="params">iterable</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;Return a copy of `iterable` with all `None` entries removed.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    If `iterable` is a mapping, return a dictionary where all pairs that have</span></span><br><span class="line"><span class="string">    value `None` have been removed.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">return</span> &#123;k: v <span class="keyword">for</span> k, v <span class="keyword">in</span> six.iteritems(iterable) <span class="keyword">if</span> v <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>&#125;</span><br><span class="line">    <span class="keyword">except</span> AttributeError:</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">type</span>(iterable)((v <span class="keyword">for</span> v <span class="keyword">in</span> iterable <span class="keyword">if</span> v <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>))</span><br><span class="line">        <span class="comment"># 这个方法就是把none去掉。 如果是映射的话去掉。 </span></span><br><span class="line">        <span class="comment"># 这个方法的异常不知道为何要写这个。 方法吧， 可能这个方法其他地方还有其他用地。</span></span><br><span class="line"><span class="comment"># 然后这个方法返回一个排序的key数值， 具体排序方法使用了itemgetter(1) ，定位过去看下。 </span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    Return a callable object that fetches the given item(s) from its operand.</span></span><br><span class="line"><span class="string">    After f = itemgetter(2), the call f(r) returns r[2].</span></span><br><span class="line"><span class="string">    After g = itemgetter(2, 5, 3), the call g(r) returns (r[2], r[5], r[3])</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line"><span class="comment"># 这个说明够详细了吧。 根据value去排序key的上面的语句。 </span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 接下来就是爬虫中间件的具体实现代码了。 我们这里可以看到他继承了。 中间件管理类， 我们看看， 如果简单的话， 就先看看</span></span><br><span class="line"><span class="comment"># 如果复杂的话就先放放。</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_get_mwlist_from_settings</span>(<span class="params">cls, settings</span>):</span></span><br><span class="line">    <span class="keyword">return</span> build_component_list(settings.getwithbase(<span class="string">&#x27;SPIDER_MIDDLEWARES&#x27;</span>))</span><br><span class="line"><span class="comment"># 从名字上， 我们知道这个是从settings里面获取中间件的列表的。没问题的。 </span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">_add_middleware</span>(<span class="params">self, mw</span>):</span></span><br><span class="line">        <span class="built_in">super</span>(SpiderMiddlewareManager, self)._add_middleware(mw)</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">hasattr</span>(mw, <span class="string">&#x27;process_spider_input&#x27;</span>):</span><br><span class="line">            self.methods[<span class="string">&#x27;process_spider_input&#x27;</span>].append(mw.process_spider_input)</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">hasattr</span>(mw, <span class="string">&#x27;process_spider_output&#x27;</span>):</span><br><span class="line">            self.methods[<span class="string">&#x27;process_spider_output&#x27;</span>].insert(<span class="number">0</span>, mw.process_spider_output)</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">hasattr</span>(mw, <span class="string">&#x27;process_spider_exception&#x27;</span>):</span><br><span class="line">            self.methods[<span class="string">&#x27;process_spider_exception&#x27;</span>].insert(<span class="number">0</span>, mw.process_spider_exception)</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">hasattr</span>(mw, <span class="string">&#x27;process_start_requests&#x27;</span>):</span><br><span class="line">            self.methods[<span class="string">&#x27;process_start_requests&#x27;</span>].insert(<span class="number">0</span>, mw.process_start_requests)</span><br><span class="line"><span class="comment"># 这个定义了一个添加中间件的方法</span></span><br><span class="line"><span class="comment"># 先调用基类的add方法， 然后判断判定是否有 process_spider_input 等等方法。 </span></span><br><span class="line"><span class="comment"># 如果有的话， 把这个中间件的方法添加到对应的方法链上去。 </span></span><br><span class="line"><span class="comment"># 这里有4个。 分别是。</span></span><br><span class="line">process_spider_input，</span><br><span class="line">process_spider_output</span><br><span class="line">process_spider_exception</span><br><span class="line">process_start_requests</span><br><span class="line"><span class="comment"># 我们这里可以看出， 如果我们自己要写爬虫中间件， 重点是这4个方法的。 切记切记。 </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># scrape_response 这个方法太长了。内部也嵌套了几个方法， 我们还是先看看内部的小方法吧。 </span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">process_spider_input</span>(<span class="params">response</span>):</span></span><br><span class="line">    <span class="keyword">for</span> method <span class="keyword">in</span> self.methods[<span class="string">&#x27;process_spider_input&#x27;</span>]:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            result = method(response=response, spider=spider)</span><br><span class="line">            <span class="keyword">assert</span> result <span class="keyword">is</span> <span class="literal">None</span>, \</span><br><span class="line">                    <span class="string">&#x27;Middleware %s must returns None or &#x27;</span> \</span><br><span class="line">                    <span class="string">&#x27;raise an exception, got %s &#x27;</span> \</span><br><span class="line">                    % (fname(method), <span class="built_in">type</span>(result))</span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            <span class="keyword">return</span> scrape_func(Failure(), request, spider)</span><br><span class="line">    <span class="keyword">return</span> scrape_func(response, request, spider)</span><br><span class="line"><span class="comment"># 处理爬虫的中间件个各个 process_spider_input 方法。</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">process_spider_exception</span>(<span class="params">_failure</span>):</span></span><br><span class="line">    exception = _failure.value</span><br><span class="line">    <span class="keyword">for</span> method <span class="keyword">in</span> self.methods[<span class="string">&#x27;process_spider_exception&#x27;</span>]:</span><br><span class="line">        result = method(response=response, exception=exception, spider=spider)</span><br><span class="line">        <span class="keyword">assert</span> result <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">or</span> _isiterable(result), \</span><br><span class="line">            <span class="string">&#x27;Middleware %s must returns None, or an iterable object, got %s &#x27;</span> % \</span><br><span class="line">            (fname(method), <span class="built_in">type</span>(result))</span><br><span class="line">        <span class="keyword">if</span> result <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="keyword">return</span> result</span><br><span class="line">    <span class="keyword">return</span> _failure </span><br><span class="line"><span class="comment"># 处理爬虫中间件的各个process_spider_exception方法。结果必须是none或者可迭代的。 </span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">process_spider_output</span>(<span class="params">result</span>):</span></span><br><span class="line">    <span class="keyword">for</span> method <span class="keyword">in</span> self.methods[<span class="string">&#x27;process_spider_output&#x27;</span>]:</span><br><span class="line">        result = method(response=response, result=result, spider=spider)</span><br><span class="line">        <span class="keyword">assert</span> _isiterable(result), \</span><br><span class="line">            <span class="string">&#x27;Middleware %s must returns an iterable object, got %s &#x27;</span> % \</span><br><span class="line">            (fname(method), <span class="built_in">type</span>(result))</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line"><span class="comment"># 处理爬虫中间件的各个process_spider_exception方法。结果可迭代的。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 这个scrape_response 方法， fname是获取到类的名字，  方法的名字</span></span><br><span class="line"></span><br><span class="line">dfd = mustbe_deferred(process_spider_input, response)</span><br><span class="line">dfd.addErrback(process_spider_exception)</span><br><span class="line">dfd.addCallback(process_spider_output)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 这段代码， 创建延迟对象， 添加错误回调方法，添加成功回调方法。 </span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">process_start_requests</span>(<span class="params">self, start_requests, spider</span>):</span></span><br><span class="line">    <span class="keyword">return</span> self._process_chain(<span class="string">&#x27;process_start_requests&#x27;</span>, start_requests, spider)</span><br><span class="line"><span class="comment"># 这个方法， 就是处理开始请求的。调用了_process_chain处理链， 接受开始的请求和对应的爬虫。 具体还是需要去基类去看看这个方法的。</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2020/07/04/spider/scrapy/20200704_%20spidermw/" data-id="ckqd7wfvf002xogtgfzbf1hm4" data-title="scrapy源码4：spidermw的源码分析" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/scrapy/" rel="tag">scrapy</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/07/05/spider/scrapy/20200705_%20middleware/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          scrapy源码5：middleware的源码分析
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/07/03/spider/scrapy/20200703_%20scraper/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">scrapy源码3：scraper的源码分析</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/python/fastapi/">fastapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/flask/">flask</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/python%E5%9F%BA%E7%A1%80/">python基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/python%E6%A1%88%E4%BE%8B/">python案例</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/">爬虫</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/pyppeteer/">pyppeteer</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/scrapy/">scrapy</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/selenium/">selenium</a></li></ul></li></ul></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/fastapi/" rel="tag">fastapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/flask/" rel="tag">flask</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pyppeteer/" rel="tag">pyppeteer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python3/" rel="tag">python3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python%E5%9F%BA%E7%A1%80/" rel="tag">python基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python%E6%A1%88%E4%BE%8B/" rel="tag">python案例</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scrapy/" rel="tag">scrapy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/selenium/" rel="tag">selenium</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%A3%E7%A0%81%E9%9B%A8/" rel="tag">代码雨</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8D%E7%88%AC/" rel="tag">反爬</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/fastapi/" style="font-size: 10px;">fastapi</a> <a href="/tags/flask/" style="font-size: 10px;">flask</a> <a href="/tags/pyppeteer/" style="font-size: 12px;">pyppeteer</a> <a href="/tags/python/" style="font-size: 18px;">python</a> <a href="/tags/python3/" style="font-size: 10px;">python3</a> <a href="/tags/python%E5%9F%BA%E7%A1%80/" style="font-size: 20px;">python基础</a> <a href="/tags/python%E6%A1%88%E4%BE%8B/" style="font-size: 12px;">python案例</a> <a href="/tags/scrapy/" style="font-size: 14px;">scrapy</a> <a href="/tags/selenium/" style="font-size: 12px;">selenium</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E9%9B%A8/" style="font-size: 10px;">代码雨</a> <a href="/tags/%E5%8F%8D%E7%88%AC/" style="font-size: 10px;">反爬</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 16px;">爬虫</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/06/26/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/02/my_application/20201202_%E5%B0%86excel%E4%B8%AD%E7%9A%84%E5%86%85%E5%AE%B9%E5%AD%98%E5%85%A5mysql/">将excel中的内容存入mysql</a>
+          </li>
+        
+          <li>
+            <a href="/2020/10/15/my_application/20201015_%E4%BB%A3%E7%A0%81%E9%9B%A8/">用python实现代码雨（电影黑客帝国里的效果，代码可直接运行）</a>
+          </li>
+        
+          <li>
+            <a href="/2020/09/29/spider/20200929_%E4%B8%89%E7%A7%8D%E5%8A%A0%E5%AF%86%E6%96%B9%E5%BC%8F/">三种加密方式 sha1加密、MD5加密、Base64加密 (附H5源码和js源码)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/07/15/spider/scrapy/20200715_%20ajaxcrawl/">scrapy源码12 - ajaxcrawl</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>python字符串和编码 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="相互转换：将数值转换成字符串，可以使用str()和repr()函数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python字符串和编码">
+<meta property="og:url" content="http://example.com/2019/02/14/python%E5%9F%BA%E7%A1%80/20190214_python%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E7%BC%96%E7%A0%81/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="相互转换：将数值转换成字符串，可以使用str()和repr()函数">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-02-14T07:24:20.000Z">
+<meta property="article:modified_time" content="2020-12-04T03:28:38.000Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="python基础">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-python基础/20190214_python字符串和编码" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2019/02/14/python%E5%9F%BA%E7%A1%80/20190214_python%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E7%BC%96%E7%A0%81/" class="article-date">
+  <time class="dt-published" datetime="2019-02-14T07:24:20.000Z" itemprop="datePublished">2019-02-14</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/python/">python</a>►<a class="article-category-link" href="/categories/python/python%E5%9F%BA%E7%A1%80/">python基础</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      python字符串和编码
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>相互转换：<br>将数值转换成字符串，可以使用str()和repr()函数</p>
+<span id="more"></span>
+
+<h4 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h4><p>1、判断类型：（9个）</p>
+<ul>
+<li>s.isspace(): 如果字符串只包含空格字符，则返回true，否则返回false。</li>
+<li>s.isalnum(): 如果字符串至少包含1个字符，并且所有字符均为数字，则返回true，否则返回false。</li>
+<li>s.isalpha(): 如果字符串至少包含1个字符，并且所有字符均为字母，则返回true，否则返回false。</li>
+<li>s.isdigit(): 如果字符串只包含数字则返回true，否则返回false。</li>
+<li>s.isnumeric(): 如果unicode字符串只包含数字字符，则返回true，否则返回false。</li>
+<li>s.istitle(): 如果字符串正确“标题大小写”，则返回true，否则返回false。</li>
+<li>s.isupper(): 如果字符串至少包含一个可变大小写字符，并且所有可变大小写字符均为大写，则返回true，否则返回false。</li>
+<li>s.islower(): 如果字符串至少包含1个字母，并且所有字符均为小写，则返回true，否则返回false。</li>
+<li>s.isdecimal() : 如果unicode字符串只包含十进制字符，则返回true，否则返回false。</li>
+</ul>
+<p>2、查找和替换：（7个）</p>
+<ul>
+<li>s.startswith(str, beg=0,end=len(string)): 确定字符串或字符串的子字符串(如果给定起始索引beg和结束索引end)以str开头; 如果是则返回true，否则返回false。</li>
+<li>s.endswith(suffix, beg = 0, end = len(string)): 确定字符串或字符串的子字符串(如果启动索引结束和结束索引结束)都以后缀结尾; 如果是则返回true，否则返回false。</li>
+<li>s.find(str, beg = 0 end = len(string)): 如果索引beg和结束索引end给定，则确定str是否在字符串或字符串的子字符串中，如果找到则返回索引，否则为-1。</li>
+<li>s.rfind(): 从右边查找。</li>
+<li>s.index(str, beg = 0, end = len(string)): 与find()相同，但如果没有找到str，则引发异常。</li>
+<li>s.rindex( str, beg = 0, end = len(string)): 与index()相同，但在字符串中向后搜索。</li>
+<li>s.replace(old, new [, max]): 如果给定max值，则用new或最多最大出现替换字符串中所有出现的旧字符(old)。</li>
+</ul>
+<p>3、大小写转换：（5个）</p>
+<ul>
+<li>s.capitalize()：把字符串的第一个字母转为大写;</li>
+<li>s.title(): 返回字符串的标题版本，即所有单词第一个字母都以大写开头，其余的都是小写的。</li>
+<li>s.upper(): 将字符串中的小写字母转换为大写。</li>
+<li>s.lower(): 将字符串中的所有大写字母转换为小写。</li>
+<li>s.swapcase(): 反转在字符串中的所有字母大小写，即小写转大写，大写转小写。</li>
+</ul>
+<p>4、文本对齐：（3个）</p>
+<ul>
+<li>s.center(width, fillchar)：返回使用fillchar填充的字符串，原始字符串以总共width列为中心。</li>
+<li>s.ljust(width[, fillchar]): 返回一个空格填充的字符串，原始字符串左对齐到总共width列。</li>
+<li>s.rjust(width,[, fillchar]): 返回一个空格填充字符串，原始字符串右对齐到总共宽度(width)列。</li>
+</ul>
+<p>5、去除空白字符：（3个）</p>
+<ul>
+<li>s.strip([chars]): 对字符串执行lstrip()和rstrip()</li>
+<li>s.lstrip(): 删除字符串中的所有前导空格</li>
+<li>s.rstrip(): 删除字符串的所有尾随空格。</li>
+</ul>
+<p>6、拆分和连接：（5个）</p>
+<ul>
+<li>s.join(seq): m将序列seq中的元素以字符串表示合并(并入)到具有分隔符字符串的字符串中。</li>
+<li>s.split(str=: 根据分隔符str(空格，如果没有提供)拆分字符串并返回子字符串列表; 如果给定，最多分割为num子串。</li>
+<li>s.splitlines( num=string.count(‘\n’)))”): 全部拆分字符串(或num)新行符，并返回每行的列表，并删除新行符。</li>
+</ul>
+<p>7、其它</p>
+<ul>
+<li>s.count(str, beg = 0,end = len(string))：计算字符串中出现有多少次str或字符串的子字符串(如果开始索引beg和结束索引end,则在beg~end范围匹配)。 </li>
+<li>s.decode(encoding = ‘UTF-8’,errors = ‘strict’): 使用编码encoding解码该字符串。 编码默认为默认字符串encoding。</li>
+<li>s.encode(encoding = ‘UTF-8’,errors = ‘strict’): 返回字符串的编码字符串版本; 在错误的情况下，默认是抛出ValueError，除非使用’ignore‘或’replace‘给出错误。</li>
+<li>s.expandtabs(tabsize = 8): 将字符串中的制表符扩展到多个空格; 如果没有提供tabize，则默认为每个制表符为8个空格。</li>
+</ul>
+<p>maketrans(): 返回在translate函数中使用的转换表。<br>max(str): 从字符串str返回最大字母字符。<br>translate(table, deletechars=根据转换表STR(256个字符): 除去那些在del字符串转换字符串。<br>zfill(width): 返回原始字符串，左边填充为零，总共有宽度(width)字符; 对于数字zfill()保留给定的任何符号(少于一个零)。</p>
+<h4 id="编码："><a href="#编码：" class="headerlink" title="编码："></a>编码：</h4><p>python编码风格：PEP8（Python Enhancement Proposal）python增强提案</p>
+<ol>
+<li>模块，包名：简短全小写，非必要时不带下划线 如：sys,re;</li>
+<li>函数名，变量名：全小写，用下划线增加可读性，如：my_func(),my_var;</li>
+<li>类名：单词首字母大写，如：MyClass;</li>
+<li>常量名：全大写，下划线分隔，如：TAX_RETE；</li>
+<li>缩进：每级相差4个空格；</li>
+<li>比较操作：不要与True或者False值比较，如：if my_var</li>
+</ol>
+<p>ython 3的字符串使用Unicode，直接支持多语言。</p>
+<p>UTF-8编码把一个Unicode字符根据不同的数字大小编码成1-6个字节，常用的英文字母被编码成1个字节，汉字通常是3个字节，只有很生僻的字符才会被编码成4-6个字节。如果你要传输的文本包含大量英文字符，用UTF-8编码就能节省空间。</p>
+<p>在计算机内存中，统一使用Unicode编码，当需要保存到硬盘或者需要传输的时候，就转换为UTF-8编码，很多网页的源码上会有类似<code>&lt;meta charset=&quot;UTF-8&quot; /&gt;</code>的信息，表示该网页正是用的UTF-8编码。</p>
+<ul>
+<li>用记事本编辑的时候，从文件读取的UTF-8字符被转换为Unicode字符到内存里，编辑完成后，保存的时候再把Unicode转换为UTF-8保存到文件；</li>
+<li>浏览网页的时候，服务器会把动态生成的Unicode内容转换为UTF-8再传输到浏览器：</li>
+</ul>
+<p>如果要在网络上传输，或者保存到磁盘上，就需要把str变为以字节为单位的bytes。Python对bytes类型的数据用带b前缀的单引号或双引号表示，bytes的每个字符都只占用一个字节。为了避免乱码问题，应当始终坚持使用UTF-8编码对str和bytes进行转换。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 以Unicode表示的str通过encode()方法可以编码为指定的bytes</span></span><br><span class="line"><span class="string">&#x27;ABC&#x27;</span>.encode(<span class="string">&#x27;ascii&#x27;</span>)</span><br><span class="line"><span class="string">&#x27;中文&#x27;</span>.encode(<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果我们从网络或磁盘上读取了字节流，那么读到的数据就是bytes。要把bytes变为str，就需要用decode()方法</span></span><br><span class="line"><span class="comment"># 如果bytes中只有一小部分无效的字节，可以传入errors=&#x27;ignore&#x27;忽略错误的字节</span></span><br><span class="line"><span class="string">b&#x27;\xe4\xb8\xad\xff&#x27;</span>.decode(<span class="string">&#x27;utf-8&#x27;</span>, errors=<span class="string">&#x27;ignore&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 当Python解释器读取源代码时，为了让它按UTF-8编码读取，我们通常在文件开头写上这两行：</span></span><br><span class="line"><span class="comment"># 第一行注释是为了告诉Linux/OS X系统，这是一个Python可执行程序，Windows系统会忽略这个注释；</span></span><br><span class="line"><span class="comment"># 第二行注释是为了告诉Python解释器，按照UTF-8编码读取源代码，否则，你在源代码中写的中文输出可能会有乱码。</span></span><br><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br></pre></td></tr></table></figure>
+
+
+<h4 id="str类型和bytes类型"><a href="#str类型和bytes类型" class="headerlink" title="str类型和bytes类型"></a>str类型和bytes类型</h4><p>bytes：二进制<br>互联网上数据的都是以二进制的方式传输的</p>
+<p>str ：unicode的呈现形式<br>字符(Character)是各种文字和符号的总称，包括各国家文字、标点符号、图形符号、数字等<br>字符集(Character set)是多个字符的集合<br>字符集包括：ASCII字符集、GB2312字符集、GB18030字符集、Unicode字符集等</p>
+<p>ASCII编码是1个字节，而Unicode编码通常是2个字节。<br>UTF-8是Unicode的实现方式之一，UTF-8是它是一种变长的编码方式，可以是1，2，3个字节</p>
+<p>str 使用encode方法转化为 bytes<br>bytes通过decode转化为str</p>
+<p>编码方式解码方式必须一样，否则就会出现乱码</p>
+<h4 id="格式化字符串"><a href="#格式化字符串" class="headerlink" title="格式化字符串"></a>格式化字符串</h4><p>第一种格式化：在字符串内部，%s表示用字符串替换，%d表示用整数替换，%f表示用浮点数替换，%x表示用十六进制替换，有几个%?占位符，后面就跟几个变量或者值，顺序要对应好。</p>
+<p>第二种格式化：使用字符串的format()方法，它会用传入的参数依次替换字符串内的占位符{0}、{1}……，</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;&#123;1&#125; and &#123;0&#125;&#x27;</span>.<span class="built_in">format</span>(<span class="string">&#x27;spam&#x27;</span>, <span class="string">&#x27;eggs&#x27;</span>))  <span class="comment"># eggs and spam</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="三种字符串格式化方式对比"><a href="#三种字符串格式化方式对比" class="headerlink" title="三种字符串格式化方式对比"></a>三种字符串格式化方式对比</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> timeit</span><br><span class="line"></span><br><span class="line"><span class="comment"># %-formatting</span></span><br><span class="line">tm1 = timeit.timeit(<span class="string">&quot;&quot;&quot;name = &quot;Xiaoming&quot;</span></span><br><span class="line"><span class="string">&#x27;Hello is %s.&#x27; % name&quot;&quot;&quot;</span>, number=<span class="number">10000</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;%用时: &#x27;</span>, tm1)  <span class="comment"># %用时:  0.001776108999999998</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># str.format()</span></span><br><span class="line">tm2 = timeit.timeit(<span class="string">&quot;&quot;&quot;name = &quot;Xiaoming&quot;</span></span><br><span class="line"><span class="string">&#x27;Hello is &#123;&#125;.&#x27;.format(name)&quot;&quot;&quot;</span>, number=<span class="number">10000</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;format用时: &#x27;</span>, tm2)  <span class="comment"># format用时:  0.0025024550000000007</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># f-Strings</span></span><br><span class="line">tm3 = timeit.timeit(<span class="string">&quot;&quot;&quot;name = &quot;Xiaoming&quot;</span></span><br><span class="line"><span class="string">f&#x27;Hello is &#123;name&#125;.&#x27;&quot;&quot;&quot;</span>, number=<span class="number">10000</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;f用时: &#x27;</span>, tm3)  <span class="comment"># f用时:  0.000950174000000005</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2019/02/14/python%E5%9F%BA%E7%A1%80/20190214_python%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E7%BC%96%E7%A0%81/" data-id="ckqd7wfub000eogtg3tk0e3mw" data-title="python字符串和编码" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python%E5%9F%BA%E7%A1%80/" rel="tag">python基础</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/02/15/python%E5%9F%BA%E7%A1%80/20190215_%E5%BA%8F%E5%88%97%EF%BC%88%E5%88%97%E8%A1%A8%EF%BC%8C%E5%85%83%E7%BB%84%EF%BC%8C%E5%AD%97%E5%85%B8%EF%BC%8C%E9%9B%86%E5%90%88%EF%BC%89/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          python序列（列表，元组，字典，集合）
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/02/13/python%E5%9F%BA%E7%A1%80/20190213_python%E5%85%B3%E9%94%AE%E5%AD%97%E5%92%8C%E5%86%85%E7%BD%AE%E5%87%BD%E6%95%B0/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">python关键字和内置函数</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/python/fastapi/">fastapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/flask/">flask</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/python%E5%9F%BA%E7%A1%80/">python基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/python%E6%A1%88%E4%BE%8B/">python案例</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/">爬虫</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/pyppeteer/">pyppeteer</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/scrapy/">scrapy</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/selenium/">selenium</a></li></ul></li></ul></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/fastapi/" rel="tag">fastapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/flask/" rel="tag">flask</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pyppeteer/" rel="tag">pyppeteer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python3/" rel="tag">python3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python%E5%9F%BA%E7%A1%80/" rel="tag">python基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python%E6%A1%88%E4%BE%8B/" rel="tag">python案例</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scrapy/" rel="tag">scrapy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/selenium/" rel="tag">selenium</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%A3%E7%A0%81%E9%9B%A8/" rel="tag">代码雨</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8D%E7%88%AC/" rel="tag">反爬</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/fastapi/" style="font-size: 10px;">fastapi</a> <a href="/tags/flask/" style="font-size: 10px;">flask</a> <a href="/tags/pyppeteer/" style="font-size: 12px;">pyppeteer</a> <a href="/tags/python/" style="font-size: 18px;">python</a> <a href="/tags/python3/" style="font-size: 10px;">python3</a> <a href="/tags/python%E5%9F%BA%E7%A1%80/" style="font-size: 20px;">python基础</a> <a href="/tags/python%E6%A1%88%E4%BE%8B/" style="font-size: 12px;">python案例</a> <a href="/tags/scrapy/" style="font-size: 14px;">scrapy</a> <a href="/tags/selenium/" style="font-size: 12px;">selenium</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E9%9B%A8/" style="font-size: 10px;">代码雨</a> <a href="/tags/%E5%8F%8D%E7%88%AC/" style="font-size: 10px;">反爬</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 16px;">爬虫</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/06/26/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/02/my_application/20201202_%E5%B0%86excel%E4%B8%AD%E7%9A%84%E5%86%85%E5%AE%B9%E5%AD%98%E5%85%A5mysql/">将excel中的内容存入mysql</a>
+          </li>
+        
+          <li>
+            <a href="/2020/10/15/my_application/20201015_%E4%BB%A3%E7%A0%81%E9%9B%A8/">用python实现代码雨（电影黑客帝国里的效果，代码可直接运行）</a>
+          </li>
+        
+          <li>
+            <a href="/2020/09/29/spider/20200929_%E4%B8%89%E7%A7%8D%E5%8A%A0%E5%AF%86%E6%96%B9%E5%BC%8F/">三种加密方式 sha1加密、MD5加密、Base64加密 (附H5源码和js源码)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/07/15/spider/scrapy/20200715_%20ajaxcrawl/">scrapy源码12 - ajaxcrawl</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>python标识符和运算符 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="标识符：自己可以起名字的地方，包括变量，方法，函数,类，模块；    1.可以由大小写字母，数字，下划线（_）组成，其中数字不能开头；    2.标识符不能是python关键字，但可以包含关键字；    3.标识符不能包含空格。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python标识符和运算符">
+<meta property="og:url" content="http://example.com/2019/02/12/python%E5%9F%BA%E7%A1%80/20190212_python%E6%A0%87%E8%AF%86%E7%AC%A6%E5%92%8C%E8%BF%90%E7%AE%97%E7%AC%A6/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="标识符：自己可以起名字的地方，包括变量，方法，函数,类，模块；    1.可以由大小写字母，数字，下划线（_）组成，其中数字不能开头；    2.标识符不能是python关键字，但可以包含关键字；    3.标识符不能包含空格。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-02-12T07:24:20.000Z">
+<meta property="article:modified_time" content="2020-10-17T03:25:41.000Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="python基础">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-python基础/20190212_python标识符和运算符" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2019/02/12/python%E5%9F%BA%E7%A1%80/20190212_python%E6%A0%87%E8%AF%86%E7%AC%A6%E5%92%8C%E8%BF%90%E7%AE%97%E7%AC%A6/" class="article-date">
+  <time class="dt-published" datetime="2019-02-12T07:24:20.000Z" itemprop="datePublished">2019-02-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/python/">python</a>►<a class="article-category-link" href="/categories/python/python%E5%9F%BA%E7%A1%80/">python基础</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      python标识符和运算符
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>标识符：自己可以起名字的地方，包括变量，方法，函数,类，模块；<br>    1.可以由大小写字母，数字，下划线（_）组成，其中数字不能开头；<br>    2.标识符不能是python关键字，但可以包含关键字；<br>    3.标识符不能包含空格。</p>
+<span id="more"></span>
+
+<p>对象本质：一个内存模块，拥有特定的值，支持特定类型的相关操作；</p>
+<p>引用：在python中，变量也称为引用，因为变量存储的对象就是地址。</p>
+<p>基本语法 :</p>
+<pre><code>在Python中严格区分大小写;
+Python中的每一行就是一条语句，每条语句以换行结束;
+Python中每一行语句不要过长（规范中建议每行不要超过80个字符）; “rulers”:[80],
+一条语句可以分多行编写，多行编写时语句后边以\结尾 ;
+Python是缩进严格的语言，所以在Python中不要随便写缩进 ;
+在Python中使用#来表示注释，#后的内容都属于注释，注释的内容将会被解释器所忽略;一般习惯上#后边会跟着一个空格
+IDE（Integrated Development Environment），集成开发环境。是用于提供程序开发环境的应用程序，一般包括代码编辑器、编译器、调试器和图形用户界面等工具。集成了代码编写功能、分析功能、编译功能、调试功能等一体化的开发软件服务套。
+常用IDE ： Atom、Sublime、Pycharm、VS Code是Python使用者常用的几款IDE。pycharm-professional-2018.1.3 : 第三方IDE打开多个.py文件时，页面较为友好。同时还有以下优点：智能提示、代码着色、代码跳转、自动完成、单元测试、版本控制等等。
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>[]</code> <code>[:]</code></td>
+<td>下标，切片</td>
+</tr>
+<tr>
+<td><code>**</code></td>
+<td>指数</td>
+</tr>
+<tr>
+<td><code>~</code> <code>+</code> <code>-</code></td>
+<td>按位取反, 正负号</td>
+</tr>
+<tr>
+<td><code>*</code> <code>/</code> <code>%</code> <code>//</code></td>
+<td>乘，除，模，整除</td>
+</tr>
+<tr>
+<td><code>+</code> <code>-</code></td>
+<td>加，减</td>
+</tr>
+<tr>
+<td><code>&gt;&gt;</code> <code>&lt;&lt;</code></td>
+<td>右移，左移</td>
+</tr>
+<tr>
+<td><code>&amp;</code></td>
+<td>按位与</td>
+</tr>
+<tr>
+<td><code>^</code></td>
+<td>按位异或</td>
+</tr>
+<tr>
+<td><code>&lt;=</code> <code>&lt;</code> <code>&gt;</code> <code>&gt;=</code></td>
+<td>小于等于，小于，大于，大于等于</td>
+</tr>
+<tr>
+<td><code>==</code> <code>!=</code></td>
+<td>等于，不等于</td>
+</tr>
+<tr>
+<td><code>is</code>  <code>is not</code></td>
+<td>身份运算符</td>
+</tr>
+<tr>
+<td><code>in</code> <code>not in</code></td>
+<td>成员运算符</td>
+</tr>
+<tr>
+<td><code>not</code> <code>or</code> <code>and</code></td>
+<td>逻辑运算符</td>
+</tr>
+<tr>
+<td><code>=</code> <code>+=</code> <code>-=</code> <code>*=</code> <code>/=</code> <code>%=</code> <code>//=</code> <code>**=</code> <code>&amp;=</code>  <code>^=</code> <code>&gt;&gt;=</code> <code>&lt;&lt;=</code></td>
+<td>（复合）赋值运算符</td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span> <span class="built_in">print</span>()</span><br><span class="line">user_name = <span class="string">&#x27;Charlie&#x27;</span></span><br><span class="line">user_age = <span class="number">8</span></span><br><span class="line"><span class="comment"># 指定sep参数，同时输出多个变量和字符串，指定分隔符</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;读者名:&quot;</span> , user_name, <span class="string">&quot;年龄:&quot;</span>, user_age, sep=<span class="string">&#x27;|&#x27;</span>)</span><br><span class="line"><span class="comment"># 指定end参数，指定输出之后不再换行</span></span><br><span class="line"><span class="built_in">print</span>(<span class="number">40</span>, <span class="string">&#x27;\t&#x27;</span>, end=<span class="string">&quot;&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">int</span>(<span class="string">&#x27;ff&#x27;</span>, <span class="number">16</span>))  <span class="comment"># 255, 将16进制的ff转成十进制</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">int</span>(<span class="string">&#x27;101&#x27;</span>, <span class="number">2</span>))  <span class="comment"># 5, 将2进制的101转成10进制</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">chr</span>(<span class="number">97</span>))  <span class="comment"># a, 转为字符</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">ord</span>(<span class="string">&#x27;a&#x27;</span>))  <span class="comment"># 转为ASCII码</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2019/02/12/python%E5%9F%BA%E7%A1%80/20190212_python%E6%A0%87%E8%AF%86%E7%AC%A6%E5%92%8C%E8%BF%90%E7%AE%97%E7%AC%A6/" data-id="ckqd7wfu50007ogtgc1re2lba" data-title="python标识符和运算符" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python%E5%9F%BA%E7%A1%80/" rel="tag">python基础</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/02/13/python%E5%9F%BA%E7%A1%80/20190213_python%E5%85%B3%E9%94%AE%E5%AD%97%E5%92%8C%E5%86%85%E7%BD%AE%E5%87%BD%E6%95%B0/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          python关键字和内置函数
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/02/12/python%E5%9F%BA%E7%A1%80/20190212_python%E5%8F%98%E9%87%8F%E5%92%8C%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">python变量和数据类型</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/python/fastapi/">fastapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/flask/">flask</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/python%E5%9F%BA%E7%A1%80/">python基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/python%E6%A1%88%E4%BE%8B/">python案例</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/">爬虫</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/pyppeteer/">pyppeteer</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/scrapy/">scrapy</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/selenium/">selenium</a></li></ul></li></ul></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/fastapi/" rel="tag">fastapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/flask/" rel="tag">flask</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pyppeteer/" rel="tag">pyppeteer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python3/" rel="tag">python3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python%E5%9F%BA%E7%A1%80/" rel="tag">python基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python%E6%A1%88%E4%BE%8B/" rel="tag">python案例</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scrapy/" rel="tag">scrapy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/selenium/" rel="tag">selenium</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%A3%E7%A0%81%E9%9B%A8/" rel="tag">代码雨</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8D%E7%88%AC/" rel="tag">反爬</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/fastapi/" style="font-size: 10px;">fastapi</a> <a href="/tags/flask/" style="font-size: 10px;">flask</a> <a href="/tags/pyppeteer/" style="font-size: 12px;">pyppeteer</a> <a href="/tags/python/" style="font-size: 18px;">python</a> <a href="/tags/python3/" style="font-size: 10px;">python3</a> <a href="/tags/python%E5%9F%BA%E7%A1%80/" style="font-size: 20px;">python基础</a> <a href="/tags/python%E6%A1%88%E4%BE%8B/" style="font-size: 12px;">python案例</a> <a href="/tags/scrapy/" style="font-size: 14px;">scrapy</a> <a href="/tags/selenium/" style="font-size: 12px;">selenium</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E9%9B%A8/" style="font-size: 10px;">代码雨</a> <a href="/tags/%E5%8F%8D%E7%88%AC/" style="font-size: 10px;">反爬</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 16px;">爬虫</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/06/26/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/02/my_application/20201202_%E5%B0%86excel%E4%B8%AD%E7%9A%84%E5%86%85%E5%AE%B9%E5%AD%98%E5%85%A5mysql/">将excel中的内容存入mysql</a>
+          </li>
+        
+          <li>
+            <a href="/2020/10/15/my_application/20201015_%E4%BB%A3%E7%A0%81%E9%9B%A8/">用python实现代码雨（电影黑客帝国里的效果，代码可直接运行）</a>
+          </li>
+        
+          <li>
+            <a href="/2020/09/29/spider/20200929_%E4%B8%89%E7%A7%8D%E5%8A%A0%E5%AF%86%E6%96%B9%E5%BC%8F/">三种加密方式 sha1加密、MD5加密、Base64加密 (附H5源码和js源码)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/07/15/spider/scrapy/20200715_%20ajaxcrawl/">scrapy源码12 - ajaxcrawl</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

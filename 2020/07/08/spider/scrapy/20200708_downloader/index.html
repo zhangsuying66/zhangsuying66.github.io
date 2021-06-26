@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>scrapy源码7：downloader的源码分析 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="这里我们看看scrapy.core.downloader 这个吧。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="scrapy源码7：downloader的源码分析">
+<meta property="og:url" content="http://example.com/2020/07/08/spider/scrapy/20200708_downloader/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="这里我们看看scrapy.core.downloader 这个吧。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-07-08T02:35:00.000Z">
+<meta property="article:modified_time" content="2020-10-23T08:54:25.000Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="爬虫">
+<meta property="article:tag" content="scrapy">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-spider/scrapy/20200708_downloader" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2020/07/08/spider/scrapy/20200708_downloader/" class="article-date">
+  <time class="dt-published" datetime="2020-07-08T02:35:00.000Z" itemprop="datePublished">2020-07-08</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/python/">python</a>►<a class="article-category-link" href="/categories/python/%E7%88%AC%E8%99%AB/">爬虫</a>►<a class="article-category-link" href="/categories/python/%E7%88%AC%E8%99%AB/scrapy/">scrapy</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      scrapy源码7：downloader的源码分析
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>这里我们看看scrapy.core.downloader 这个吧。 </p>
+<span id="more"></span>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> absolute_import</span><br><span class="line"><span class="comment"># 建议尽可能多的使用绝对导入，因此在你的代码中使用from pkg improt string是适宜的。</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> warnings </span><br><span class="line"><span class="comment"># 这就是导入随机数和警告</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime</span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> deque</span><br><span class="line"><span class="comment"># 这些也是导入基本的包， 没啥问题。 </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> six</span><br><span class="line"><span class="keyword">from</span> twisted.internet <span class="keyword">import</span> reactor, defer, task</span><br><span class="line"><span class="comment"># 这里导入了兼容包six， 以及twisted 下的reactor反应堆， defer以及task。</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> scrapy.utils.defer <span class="keyword">import</span> mustbe_deferred</span><br><span class="line"><span class="comment"># 导入强制deferred </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> scrapy.utils.httpobj <span class="keyword">import</span> urlparse_cached</span><br><span class="line"><span class="comment"># 这个我们定位过去看看</span></span><br><span class="line"></span><br><span class="line">_urlparse_cache = weakref.WeakKeyDictionary()</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">urlparse_cached</span>(<span class="params">request_or_response</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;Return urlparse.urlparse caching the result, where the argument can be a</span></span><br><span class="line"><span class="string">    Request or Response object</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> request_or_response <span class="keyword">not</span> <span class="keyword">in</span> _urlparse_cache:</span><br><span class="line">        _urlparse_cache[request_or_response] = urlparse(request_or_response.url)</span><br><span class="line">    <span class="keyword">return</span> _urlparse_cache[request_or_response]</span><br><span class="line"><span class="comment"># 方法是返回一个结果urlparse,urlparse的缓存结果。 参数可以使请求也可以是响应。 </span></span><br><span class="line"><span class="comment"># 如果对象不再字典里面， 就缓存下， 然后返回。</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> scrapy.resolver <span class="keyword">import</span> dnscache</span><br><span class="line"><span class="comment"># dnscache = LocalCache(10000) ， 说明dnscache 是个dict 的。 </span></span><br><span class="line"><span class="keyword">from</span> scrapy <span class="keyword">import</span> signals 导入信号</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> .middleware <span class="keyword">import</span> DownloaderMiddlewareManager</span><br><span class="line"><span class="keyword">from</span> .handlers <span class="keyword">import</span> DownloadHandlers</span><br><span class="line"><span class="comment"># 导入了下载中间件和下载处理</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 这个文件2个类， 我们一个一个看。 </span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, concurrency, delay, randomize_delay</span>):</span></span><br><span class="line">        self.concurrency = concurrency</span><br><span class="line">        self.delay = delay</span><br><span class="line">        self.randomize_delay = randomize_delay</span><br><span class="line"></span><br><span class="line">        self.active = <span class="built_in">set</span>()</span><br><span class="line">        self.queue = deque()</span><br><span class="line">        self.transferring = <span class="built_in">set</span>()</span><br><span class="line">        self.lastseen = <span class="number">0</span></span><br><span class="line">        self.latercall = <span class="literal">None</span></span><br><span class="line"><span class="comment"># 初始化工作 。 并发，延迟， 是否随机延迟， 活动集合， 队列， 正在传输集合， 最后调用， </span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">free_transfer_slots</span>(<span class="params">self</span>):</span></span><br><span class="line">    <span class="keyword">return</span> self.concurrency - <span class="built_in">len</span>(self.transferring)</span><br><span class="line">    <span class="comment"># 并发度 - 当前传输的个数=  得到空闲的传输槽</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">download_delay</span>(<span class="params">self</span>):</span></span><br><span class="line">    <span class="keyword">if</span> self.randomize_delay:</span><br><span class="line">        <span class="keyword">return</span> random.uniform(<span class="number">0.5</span> * self.delay, <span class="number">1.5</span> * self.delay)</span><br><span class="line">    <span class="keyword">return</span> self.delay</span><br><span class="line"><span class="comment"># 下载延迟，如果随机延迟开启的话 在0.5 1.5倍delay之间返回一个值， 否则直接使用delay值。 </span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">close</span>(<span class="params">self</span>):</span></span><br><span class="line">    <span class="keyword">if</span> self.latercall <span class="keyword">and</span> self.latercall.active():</span><br><span class="line">        self.latercall.cancel()</span><br><span class="line"><span class="comment"># 关闭下载器，  如果最后一个调用存在，代用cancel取消。</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__repr__</span>(<span class="params">self</span>):</span></span><br><span class="line">    cls_name = self.__class__.__name__</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;%s(concurrency=%r, delay=%0.2f, randomize_delay=%r)&quot;</span> % (</span><br><span class="line">        cls_name, self.concurrency, self.delay, self.randomize_delay)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__str__</span>(<span class="params">self</span>):</span></span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">        <span class="string">&quot;&lt;downloader.Slot concurrency=%r delay=%0.2f randomize_delay=%r &quot;</span></span><br><span class="line">        <span class="string">&quot;len(active)=%d len(queue)=%d len(transferring)=%d lastseen=%s&gt;&quot;</span> % (</span><br><span class="line">            self.concurrency, self.delay, self.randomize_delay,</span><br><span class="line">            <span class="built_in">len</span>(self.active), <span class="built_in">len</span>(self.queue), <span class="built_in">len</span>(self.transferring),</span><br><span class="line">            datetime.fromtimestamp(self.lastseen).isoformat()</span><br><span class="line">        )</span><br><span class="line">    )</span><br><span class="line"><span class="comment"># 这2个就是基本的方法了。 没啥问题的。 </span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_get_concurrency_delay</span>(<span class="params">concurrency, spider, settings</span>):</span></span><br><span class="line">    delay = settings.getfloat(<span class="string">&#x27;DOWNLOAD_DELAY&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">hasattr</span>(spider, <span class="string">&#x27;DOWNLOAD_DELAY&#x27;</span>):</span><br><span class="line">        warnings.warn(<span class="string">&quot;%s.DOWNLOAD_DELAY attribute is deprecated, use %s.download_delay instead&quot;</span> %</span><br><span class="line">                      (<span class="built_in">type</span>(spider).__name__, <span class="built_in">type</span>(spider).__name__))</span><br><span class="line">        delay = spider.DOWNLOAD_DELAY</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">hasattr</span>(spider, <span class="string">&#x27;download_delay&#x27;</span>):</span><br><span class="line">        delay = spider.download_delay</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">hasattr</span>(spider, <span class="string">&#x27;max_concurrent_requests&#x27;</span>):</span><br><span class="line">        concurrency = spider.max_concurrent_requests</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> concurrency, delay</span><br><span class="line"><span class="comment"># 获取并发的延迟， 从设置里面获取download_delay 也就是获取下载延迟设置。 </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果爬虫有对应的下载延迟设置， 提示警告。 还是采用其设置值。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果爬虫有对应的download_delay设置，设置值。</span></span><br><span class="line"><span class="comment"># 如果有最大并发请求个数，最总返回一个最大并发数和延迟量。 </span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 接下来看看这个下载downloader类</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, crawler</span>):</span></span><br><span class="line">    self.settings = crawler.settings</span><br><span class="line">    self.signals = crawler.signals</span><br><span class="line">    self.slots = &#123;&#125;</span><br><span class="line">    self.active = <span class="built_in">set</span>()</span><br><span class="line">    self.handlers = DownloadHandlers(crawler)</span><br><span class="line">    self.total_concurrency = self.settings.getint(<span class="string">&#x27;CONCURRENT_REQUESTS&#x27;</span>)</span><br><span class="line">    self.domain_concurrency = self.settings.getint(<span class="string">&#x27;CONCURRENT_REQUESTS_PER_DOMAIN&#x27;</span>)</span><br><span class="line">    self.ip_concurrency = self.settings.getint(<span class="string">&#x27;CONCURRENT_REQUESTS_PER_IP&#x27;</span>)</span><br><span class="line">    self.randomize_delay = self.settings.getbool(<span class="string">&#x27;RANDOMIZE_DOWNLOAD_DELAY&#x27;</span>)</span><br><span class="line">    self.middleware = DownloaderMiddlewareManager.from_crawler(crawler)</span><br><span class="line">    self._slot_gc_loop = task.LoopingCall(self._slot_gc)</span><br><span class="line">    self._slot_gc_loop.start(<span class="number">60</span>)</span><br><span class="line"><span class="comment"># 这个是downloader的初始化方法， 根据一个crawler去初始化， </span></span><br><span class="line"><span class="comment"># 获取crawler的设置和信号， </span></span><br><span class="line"><span class="comment"># 构造一个slots集合， 和一个活动集合。 </span></span><br><span class="line"><span class="comment"># 根据crawler构造一个下载处理对象。 </span></span><br><span class="line"><span class="comment"># 从设置获取并行请求，每个与的最大请求书， 每个ip的并发请求限制， 随机下载延迟，  中间件通过中间件管理构造。 </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># task.LoopingCall 百度下， 是一个定时的反复，    </span></span><br><span class="line"> self._slot_gc_loop = task.LoopingCall(self._slot_gc)</span><br><span class="line">    self._slot_gc_loop.start(<span class="number">60</span>) </span><br><span class="line">    <span class="comment"># 这2句话的意思就是每60s就去执行下self._slot_gc方法。</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fetch</span>(<span class="params">self, request, spider</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_deactivate</span>(<span class="params">response</span>):</span></span><br><span class="line">        self.active.remove(request)</span><br><span class="line">        <span class="keyword">return</span> response</span><br><span class="line"></span><br><span class="line">    self.active.add(request)</span><br><span class="line">    dfd = self.middleware.download(self._enqueue_request, request, spider)</span><br><span class="line">    <span class="keyword">return</span> dfd.addBoth(_deactivate)</span><br><span class="line"><span class="comment"># 活动集合添加请求， 下载中间件完成下载获取deffered对象， 添加一个回调方法移除请求。 </span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">needs_backout</span>(<span class="params">self</span>):</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">len</span>(self.active) &gt;= self.total_concurrency</span><br><span class="line"><span class="comment"># 判断当前活动的个数是不是超出了总的并发量</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_get_slot_key</span>(<span class="params">self, request, spider</span>):</span></span><br><span class="line">    <span class="keyword">if</span> <span class="string">&#x27;download_slot&#x27;</span> <span class="keyword">in</span> request.meta:</span><br><span class="line">        <span class="keyword">return</span> request.meta[<span class="string">&#x27;download_slot&#x27;</span>]</span><br><span class="line"></span><br><span class="line">    key = urlparse_cached(request).hostname <span class="keyword">or</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">if</span> self.ip_concurrency:</span><br><span class="line">        key = dnscache.get(key, key)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> key </span><br><span class="line"><span class="comment"># 这个先看看meta有没有download_slot ，如果有的话就直接返回</span></span><br><span class="line"><span class="comment"># 没有话，就从urlparse缓冲里面获取到主机名，如果为空，就设置为‘’ ，如果有ip并发限制</span></span><br><span class="line"><span class="comment"># 从dns缓冲中获取</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_get_slot</span>(<span class="params">self, request, spider</span>):</span></span><br><span class="line">    key = self._get_slot_key(request, spider)</span><br><span class="line">    <span class="keyword">if</span> key <span class="keyword">not</span> <span class="keyword">in</span> self.slots:</span><br><span class="line">        conc = self.ip_concurrency <span class="keyword">if</span> self.ip_concurrency <span class="keyword">else</span> self.domain_concurrency</span><br><span class="line">        conc, delay = _get_concurrency_delay(conc, spider, self.settings)</span><br><span class="line">        self.slots[key] = Slot(conc, delay, self.randomize_delay)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> key, self.slots[key]</span><br><span class="line"><span class="comment"># 获取key , 如果key不在slots里面， 如果ip限制了。 就使用ip限制， 否则使用域限制。 </span></span><br><span class="line"><span class="comment"># 获取并发和延迟从设置里面， 根据key创建一个slot</span></span><br><span class="line"><span class="comment"># 返回key 和slot</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_enqueue_request</span>(<span class="params">self, request, spider</span>):</span></span><br><span class="line">    key, slot = self._get_slot(request, spider)</span><br><span class="line">    request.meta[<span class="string">&#x27;download_slot&#x27;</span>] = key</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_deactivate</span>(<span class="params">response</span>):</span></span><br><span class="line">        slot.active.remove(request)</span><br><span class="line">        <span class="keyword">return</span> response</span><br><span class="line"></span><br><span class="line">    slot.active.add(request)</span><br><span class="line">    deferred = defer.Deferred().addBoth(_deactivate)</span><br><span class="line">    slot.queue.append((request, deferred))</span><br><span class="line">    self._process_queue(spider, slot)</span><br><span class="line">    <span class="keyword">return</span> deferred</span><br><span class="line"><span class="comment"># 根据请求和爬虫获取key 和slot , 设置请求的meta， slot的active集合添加请求， 添加回调方法去移除活动集合。</span></span><br><span class="line"><span class="comment"># slot的队列添加一个。 调用process_queue 去处理队列。 返回deferred对象。</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_process_queue</span>(<span class="params">self, spider, slot</span>):</span></span><br><span class="line">    <span class="keyword">if</span> slot.latercall <span class="keyword">and</span> slot.latercall.active():</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># Delay queue processing if a download_delay is configured</span></span><br><span class="line">    now = time()</span><br><span class="line">    delay = slot.download_delay()</span><br><span class="line">    <span class="keyword">if</span> delay:</span><br><span class="line">        penalty = delay - now + slot.lastseen</span><br><span class="line">        <span class="keyword">if</span> penalty &gt; <span class="number">0</span>:</span><br><span class="line">            slot.latercall = reactor.callLater(penalty, self._process_queue, spider, slot)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># Process enqueued requests if there are free slots to transfer for this slot</span></span><br><span class="line">    <span class="keyword">while</span> slot.queue <span class="keyword">and</span> slot.free_transfer_slots() &gt; <span class="number">0</span>:</span><br><span class="line">        slot.lastseen = now</span><br><span class="line">        request, deferred = slot.queue.popleft()</span><br><span class="line">        dfd = self._download(slot, request, spider)</span><br><span class="line">        dfd.chainDeferred(deferred)</span><br><span class="line">        <span class="comment"># prevent burst if inter-request delays were configured</span></span><br><span class="line">        <span class="keyword">if</span> delay:</span><br><span class="line">            self._process_queue(spider, slot)</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line"><span class="comment"># 处理队列的方法， 如果最后一个调用在，就返回， </span></span><br><span class="line"><span class="comment"># 获取当前时间， 从slot获取下载延迟， </span></span><br><span class="line"><span class="comment"># 如果有延迟， lastseen 上次slot使用时间， - now 得到 上次使用距离当前时间的差值， 加delay </span></span><br><span class="line"><span class="comment"># 如果大于0 说明 等待时间小于延迟时间了。 可以进行下一步操作了。 </span></span><br><span class="line"><span class="comment"># 设置下lastcall  设置下几秒之后执行方法。 也就是设置了。等待几秒去执行self._process_queue 方法。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果还有空闲的传输clost的话， </span></span><br><span class="line"><span class="comment"># 设置lastseen为now,</span></span><br><span class="line"><span class="comment"># 从队列取出一个，调用_download返回一个deferred对象， 添加到deferred链上，如果有延迟，执行#_process_queue方法。</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_download</span>(<span class="params">self, slot, request, spider</span>):</span></span><br><span class="line">    <span class="comment"># The order is very important for the following deferreds. Do not change!</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 1. Create the download deferred</span></span><br><span class="line">    dfd = mustbe_deferred(self.handlers.download_request, request, spider)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 2. Notify response_downloaded listeners about the recent download</span></span><br><span class="line">    <span class="comment"># before querying queue for next request</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_downloaded</span>(<span class="params">response</span>):</span></span><br><span class="line">        self.signals.send_catch_log(signal=signals.response_downloaded,</span><br><span class="line">                                    response=response,</span><br><span class="line">                                    request=request,</span><br><span class="line">                                    spider=spider)</span><br><span class="line">        <span class="keyword">return</span> response</span><br><span class="line">    dfd.addCallback(_downloaded)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 3. After response arrives,  remove the request from transferring</span></span><br><span class="line">    <span class="comment"># state to free up the transferring slot so it can be used by the</span></span><br><span class="line">    <span class="comment"># following requests (perhaps those which came from the downloader</span></span><br><span class="line">    <span class="comment"># middleware itself)</span></span><br><span class="line">    slot.transferring.add(request)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">finish_transferring</span>(<span class="params">_</span>):</span></span><br><span class="line">        slot.transferring.remove(request)</span><br><span class="line">        self._process_queue(spider, slot)</span><br><span class="line">        <span class="keyword">return</span> _</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> dfd.addBoth(finish_transferring)</span><br><span class="line"><span class="comment"># 这个方法写的注释很是详细。 </span></span><br><span class="line"><span class="comment"># 创建一个下载deferred， </span></span><br><span class="line"><span class="comment"># 通知响应下载监听关于最近的下载，在查询队列为下一次请求之前。</span></span><br><span class="line"><span class="comment"># 在响应接收到到之后， 移除请求从传输状态到free的传输slot上，让其空间给其他请求使用。</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">close</span>(<span class="params">self</span>):</span></span><br><span class="line">    self._slot_gc_loop.stop()</span><br><span class="line">    <span class="keyword">for</span> slot <span class="keyword">in</span> six.itervalues(self.slots):</span><br><span class="line">        slot.close()</span><br><span class="line"><span class="comment"># 关闭方法，  关闭gc_loop </span></span><br><span class="line"><span class="comment"># 关闭所有slot。</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_slot_gc</span>(<span class="params">self, age=<span class="number">60</span></span>):</span></span><br><span class="line">    mintime = time() - age</span><br><span class="line">    <span class="keyword">for</span> key, slot <span class="keyword">in</span> <span class="built_in">list</span>(self.slots.items()):</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> slot.active <span class="keyword">and</span> slot.lastseen + slot.delay &lt; mintime:</span><br><span class="line">            self.slots.pop(key).close()</span><br><span class="line"><span class="comment"># 获取近一分钟内，遍历slots。</span></span><br><span class="line"><span class="comment"># 如果slot的状态不是active,上次访问+延迟&lt; mintime的话， 就从slots里面pop出来。 并关闭。</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2020/07/08/spider/scrapy/20200708_downloader/" data-id="ckqd7wfvj0039ogtgcuxi3iup" data-title="scrapy源码7：downloader的源码分析" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/scrapy/" rel="tag">scrapy</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/07/10/spider/scrapy/20200709_%20contextfactory/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          scrapy源码8 - contextfactory
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/07/07/spider/scrapy/20200707_deffer%E5%92%8Cparallel/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">scrapy源码6：deffer和parallel的源码分析</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/python/fastapi/">fastapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/flask/">flask</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/python%E5%9F%BA%E7%A1%80/">python基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/python%E6%A1%88%E4%BE%8B/">python案例</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/">爬虫</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/pyppeteer/">pyppeteer</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/scrapy/">scrapy</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/selenium/">selenium</a></li></ul></li></ul></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/fastapi/" rel="tag">fastapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/flask/" rel="tag">flask</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pyppeteer/" rel="tag">pyppeteer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python3/" rel="tag">python3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python%E5%9F%BA%E7%A1%80/" rel="tag">python基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python%E6%A1%88%E4%BE%8B/" rel="tag">python案例</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scrapy/" rel="tag">scrapy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/selenium/" rel="tag">selenium</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%A3%E7%A0%81%E9%9B%A8/" rel="tag">代码雨</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8D%E7%88%AC/" rel="tag">反爬</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/fastapi/" style="font-size: 10px;">fastapi</a> <a href="/tags/flask/" style="font-size: 10px;">flask</a> <a href="/tags/pyppeteer/" style="font-size: 12px;">pyppeteer</a> <a href="/tags/python/" style="font-size: 18px;">python</a> <a href="/tags/python3/" style="font-size: 10px;">python3</a> <a href="/tags/python%E5%9F%BA%E7%A1%80/" style="font-size: 20px;">python基础</a> <a href="/tags/python%E6%A1%88%E4%BE%8B/" style="font-size: 12px;">python案例</a> <a href="/tags/scrapy/" style="font-size: 14px;">scrapy</a> <a href="/tags/selenium/" style="font-size: 12px;">selenium</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E9%9B%A8/" style="font-size: 10px;">代码雨</a> <a href="/tags/%E5%8F%8D%E7%88%AC/" style="font-size: 10px;">反爬</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 16px;">爬虫</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/06/26/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/02/my_application/20201202_%E5%B0%86excel%E4%B8%AD%E7%9A%84%E5%86%85%E5%AE%B9%E5%AD%98%E5%85%A5mysql/">将excel中的内容存入mysql</a>
+          </li>
+        
+          <li>
+            <a href="/2020/10/15/my_application/20201015_%E4%BB%A3%E7%A0%81%E9%9B%A8/">用python实现代码雨（电影黑客帝国里的效果，代码可直接运行）</a>
+          </li>
+        
+          <li>
+            <a href="/2020/09/29/spider/20200929_%E4%B8%89%E7%A7%8D%E5%8A%A0%E5%AF%86%E6%96%B9%E5%BC%8F/">三种加密方式 sha1加密、MD5加密、Base64加密 (附H5源码和js源码)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/07/15/spider/scrapy/20200715_%20ajaxcrawl/">scrapy源码12 - ajaxcrawl</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

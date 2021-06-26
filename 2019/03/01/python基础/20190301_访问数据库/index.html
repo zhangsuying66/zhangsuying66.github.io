@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>python访问数据库 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="1. python连接mysql并实现增删改查">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python访问数据库">
+<meta property="og:url" content="http://example.com/2019/03/01/python%E5%9F%BA%E7%A1%80/20190301_%E8%AE%BF%E9%97%AE%E6%95%B0%E6%8D%AE%E5%BA%93/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1. python连接mysql并实现增删改查">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-03-01T07:24:20.000Z">
+<meta property="article:modified_time" content="2020-10-17T03:28:02.000Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="python基础">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-python基础/20190301_访问数据库" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2019/03/01/python%E5%9F%BA%E7%A1%80/20190301_%E8%AE%BF%E9%97%AE%E6%95%B0%E6%8D%AE%E5%BA%93/" class="article-date">
+  <time class="dt-published" datetime="2019-03-01T07:24:20.000Z" itemprop="datePublished">2019-03-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/python/">python</a>►<a class="article-category-link" href="/categories/python/python%E5%9F%BA%E7%A1%80/">python基础</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      python访问数据库
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h5 id="1-python连接mysql并实现增删改查"><a href="#1-python连接mysql并实现增删改查" class="headerlink" title="1. python连接mysql并实现增删改查"></a>1. python连接mysql并实现增删改查</h5><span id="more"></span>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Databse</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.conn = pymysql.connect(host=<span class="string">&quot;数据库地址&quot;</span>,</span><br><span class="line">                                    user=<span class="string">&quot;用户名&quot;</span>,</span><br><span class="line">                                    password=<span class="string">&quot;密码&quot;</span>,</span><br><span class="line">                                    port=<span class="number">3306</span>,  <span class="comment"># 端口  </span></span><br><span class="line">                                    database=<span class="string">&quot;数据库名&quot;</span>,</span><br><span class="line">                                    charset=<span class="string">&#x27;utf8&#x27;</span>)</span><br><span class="line">        self.cursor = self.conn.cursor()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getData</span>(<span class="params">self</span>):</span></span><br><span class="line">        data = []</span><br><span class="line">        self.cursor.execute(<span class="string">r&quot;select url from worm_tb&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> self.cursor.rowcount != <span class="number">0</span>:</span><br><span class="line">            result = self.cursor.fetchall()</span><br><span class="line">            <span class="keyword">for</span> d <span class="keyword">in</span> result:</span><br><span class="line">                data.append(d[<span class="number">0</span>])</span><br><span class="line">        <span class="keyword">return</span> data</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">insert</span>(<span class="params">self, url</span>):</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            self.cursor.execute(<span class="string">r&quot;insert into worm_tb (url) values (&#x27;%s&#x27;)&quot;</span> % url)</span><br><span class="line">            self.conn.commit()</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            <span class="built_in">print</span>(e)</span><br><span class="line">            self.conn.rollback()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">die</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.cursor.close()</span><br><span class="line">        self.conn.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    db = Databse()</span><br><span class="line">    db.insert(<span class="string">&#x27;www.baidu.com&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(db.getData())</span><br><span class="line">    db.die()</span><br></pre></td></tr></table></figure>
+
+<p>案例：把控制台输入的数据,写入MySQL数据库</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    no = <span class="built_in">int</span>(<span class="built_in">input</span>(<span class="string">&#x27;编号: &#x27;</span>))</span><br><span class="line">    name = <span class="built_in">input</span>(<span class="string">&#x27;名字: &#x27;</span>)</span><br><span class="line">    loc = <span class="built_in">input</span>(<span class="string">&#x27;所在地: &#x27;</span>)</span><br><span class="line">    <span class="comment"># 1. 创建数据库连接对象</span></span><br><span class="line">    con = pymysql.connect(host=<span class="string">&#x27;localhost&#x27;</span>, port=<span class="number">3306</span>,</span><br><span class="line">                          database=<span class="string">&#x27;test&#x27;</span>, charset=<span class="string">&#x27;utf8&#x27;</span>,</span><br><span class="line">                          user=<span class="string">&#x27;root&#x27;</span>, password=<span class="string">&#x27;123456&#x27;</span>)</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="comment"># 2. 通过连接对象获取游标</span></span><br><span class="line">        <span class="keyword">with</span> con.cursor() <span class="keyword">as</span> cursor:</span><br><span class="line">            <span class="comment"># 3. 通过游标执行SQL并获得执行结果</span></span><br><span class="line">            result = cursor.execute(</span><br><span class="line">                <span class="string">&#x27;insert into tb_dept values (%s, %s, %s)&#x27;</span>,</span><br><span class="line">                (no, name, loc)</span><br><span class="line">            )</span><br><span class="line">        <span class="keyword">if</span> result == <span class="number">1</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;添加成功!&#x27;</span>)</span><br><span class="line">        <span class="comment"># 4. 操作成功提交事务</span></span><br><span class="line">        con.commit()</span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        <span class="comment"># 5. 关闭连接释放资源</span></span><br><span class="line">        con.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    main()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h5 id="2-用python查询数据库中的数据并保存至文本"><a href="#2-用python查询数据库中的数据并保存至文本" class="headerlink" title="2. 用python查询数据库中的数据并保存至文本"></a>2. 用python查询数据库中的数据并保存至文本</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#coding=utf-8</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> pymysql <span class="keyword">as</span> MySQLdb  <span class="comment">#这里是python3  如果你是python2.x的话，import MySQLdb</span></span><br><span class="line"></span><br><span class="line">host = xxxx</span><br><span class="line">user = xxxx</span><br><span class="line">passwd = xxxx</span><br><span class="line">port = xxxx</span><br><span class="line">db = xxxx</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SelectMySQL</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">select_data</span>(<span class="params">self,sql</span>):</span></span><br><span class="line">        result = []</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            conn = MySQLdb.connect(host=host,</span><br><span class="line">                               port=port,</span><br><span class="line">                               user=user,</span><br><span class="line">                               passwd=passwd,</span><br><span class="line">                               db=db,</span><br><span class="line">                               charset=<span class="string">&#x27;utf8&#x27;</span>, )</span><br><span class="line">            cur = conn.cursor()</span><br><span class="line">            cur.execute(sql)</span><br><span class="line">            alldata = cur.fetchall()</span><br><span class="line">            <span class="comment"># print(alldata)</span></span><br><span class="line">            <span class="keyword">for</span> rec <span class="keyword">in</span> alldata:</span><br><span class="line">                result.append(rec[<span class="number">0</span>]) <span class="comment">#注意，我这里只是把查询出来的第一列数据保存到结果中了,如果是多列的话，稍微修改下就ok了</span></span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;Error msg: &#x27;</span> + e)</span><br><span class="line">        <span class="keyword">finally</span>:</span><br><span class="line">            cur.close()</span><br><span class="line">            conn.close()</span><br><span class="line">  </span><br><span class="line">        <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_result</span>(<span class="params">self, sql, filename</span>):</span></span><br><span class="line">        <span class="built_in">print</span>(sql)</span><br><span class="line">        results = self.select_data(sql)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;The amount of datas: %d&#x27;</span> % (<span class="built_in">len</span>(results)))</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(filename, <span class="string">&#x27;w&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            <span class="keyword">for</span> result <span class="keyword">in</span> results:</span><br><span class="line">                f.write(<span class="built_in">str</span>(result) + <span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;Data write is over!&#x27;</span>)</span><br><span class="line">        <span class="keyword">return</span> results</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    sql = <span class="string">&quot;select name from user&quot;</span></span><br><span class="line">    select = SelectMySQL()</span><br><span class="line">    result1 = select.get_result(sql,<span class="string">&#x27;namemsg.txt&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(result1)</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h5 id="3"><a href="#3" class="headerlink" title="3."></a>3.</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Mysql</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.content = pymysql.Connect(</span><br><span class="line">            host=<span class="string">&#x27;localhost&#x27;</span>,  <span class="comment"># mysql的主机ip</span></span><br><span class="line">            port=<span class="number">3306</span>,  <span class="comment"># 端口</span></span><br><span class="line">            user=<span class="string">&#x27;root&#x27;</span>,  <span class="comment"># 用户名</span></span><br><span class="line">            passwd=<span class="string">&#x27;123456&#x27;</span>,  <span class="comment"># 数据库密码</span></span><br><span class="line">            db=<span class="string">&#x27;test&#x27;</span>,  <span class="comment"># 数据库名</span></span><br><span class="line">            charset=<span class="string">&#x27;utf8&#x27;</span>,  <span class="comment"># 字符集</span></span><br><span class="line">        )</span><br><span class="line">        self.cursor = self.content.cursor()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">query</span>(<span class="params">self</span>):</span></span><br><span class="line">        sql = <span class="string">&quot;select * from chinamoney_ann_v1;&quot;</span></span><br><span class="line">        self.cursor.execute(sql)</span><br><span class="line">        <span class="keyword">for</span> row <span class="keyword">in</span> self.cursor.fetchall():</span><br><span class="line">            <span class="built_in">print</span>(row)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;一共查找到：<span class="subst">&#123;self.cursor.rowcount&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">end</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.cursor.close()</span><br><span class="line">        self.content.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    mysql = Mysql()</span><br><span class="line">    mysql.query()</span><br><span class="line">    mysql.end()</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h4 id="案例：一整套"><a href="#案例：一整套" class="headerlink" title="案例：一整套"></a>案例：一整套</h4><p>第一步：打开数据库连接</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line"></span><br><span class="line">db = pymysql.connect(host=<span class="string">&quot;数据库地址&quot;</span>, </span><br><span class="line">                     user=<span class="string">&quot;用户名&quot;</span>, </span><br><span class="line">                     password=<span class="string">&quot;密码&quot;</span>, </span><br><span class="line">                     port=<span class="number">3306</span>,<span class="comment"># 端口  </span></span><br><span class="line">                     database=<span class="string">&quot;数据库名&quot;</span>, </span><br><span class="line">                     charset=<span class="string">&#x27;utf8&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+
+<p>第二步：创建游标</p>
+<p>cursor = db.cursor()</p>
+<p>第三步：操作数据库</p>
+<p>1、创建表</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 如果数据表已经存在使用execute()方法删除表。</span></span><br><span class="line">cursor.execute(<span class="string">&quot;DROP TABLE IF EXISTS EMPLOYEE&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建数据表SQL语句</span></span><br><span class="line">sql = <span class="string">&quot;&quot;&quot;CREATE TABLE EMPLOYEE (</span></span><br><span class="line"><span class="string">         FIRST_NAME  CHAR(20) NOT NULL,</span></span><br><span class="line"><span class="string">         LAST_NAME  CHAR(20),</span></span><br><span class="line"><span class="string">         AGE INT,  </span></span><br><span class="line"><span class="string">         SEX CHAR(1),</span></span><br><span class="line"><span class="string">         INCOME FLOAT )&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">cursor.execute(sql)</span><br></pre></td></tr></table></figure>
+<p>2、查询数据#<br>Python查询Mysql使用 fetchone() 方法获取单条数据, 使用fetchall() 方法获取多条数据。<br>fetchone(): 该收全部的返回结果行.<br>rowcount: 这是方法获取下一个查询结果集。结果集是一个对象<br>fetchall():接一个只读属性，并返回执行execute()方法后影响的行数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># SQL 查询语句</span></span><br><span class="line">sql = <span class="string">&quot;SELECT * FROM EMPLOYEE WHERE INCOME &gt; &#123;&#125;&quot;</span>.<span class="built_in">format</span>(<span class="number">1000</span>)</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="comment"># 执行SQL语句</span></span><br><span class="line">    cursor.execute(sql)</span><br><span class="line">    <span class="comment"># 获取所有记录列表</span></span><br><span class="line">    results = cursor.fetchall()</span><br><span class="line">    <span class="keyword">for</span> row <span class="keyword">in</span> results:</span><br><span class="line">        fname = row[<span class="number">0</span>]</span><br><span class="line">        lname = row[<span class="number">1</span>]</span><br><span class="line">        age = row[<span class="number">2</span>]</span><br><span class="line">        sex = row[<span class="number">3</span>]</span><br><span class="line">        income = row[<span class="number">4</span>]</span><br><span class="line">        <span class="comment"># 打印结果</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;fname=&#123;&#125;,lname=&#123;&#125;,age=&#123;&#125;,sex=&#123;&#125;,income=&#123;&#125;&quot;</span>.<span class="built_in">format</span>(fname, lname, age, sex, income))</span><br><span class="line"></span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Error: unable to fecth data&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+
+<p>3、添加数据</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># SQL 插入语句</span></span><br><span class="line">sql = <span class="string">&quot;&quot;&quot;INSERT INTO EMPLOYEE(FIRST_NAME,</span></span><br><span class="line"><span class="string">         LAST_NAME, AGE, SEX, INCOME)</span></span><br><span class="line"><span class="string">         VALUES (&#x27;Mac&#x27;, &#x27;Mohan&#x27;, 20, &#x27;M&#x27;, 2000)&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    cursor.execute(sql)</span><br><span class="line">    <span class="comment"># 提交到数据库执行</span></span><br><span class="line">    db.commit()</span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">    <span class="comment"># 发生错误时回滚</span></span><br><span class="line">    db.rollback()</span><br></pre></td></tr></table></figure>
+
+<p>4、修改数据</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># SQL 更新语句</span></span><br><span class="line">sql = <span class="string">&quot;UPDATE EMPLOYEE SET AGE = AGE + 1 WHERE SEX = &#x27;&#123;&#125;&#x27;&quot;</span>.<span class="built_in">format</span>(<span class="string">&#x27;M&#x27;</span>)</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    cursor.execute(sql)</span><br><span class="line">    <span class="comment"># 提交到数据库执行</span></span><br><span class="line">    db.commit()</span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">    <span class="comment"># 发生错误时回滚</span></span><br><span class="line">    db.rollback()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<p>5、删除数据</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># SQL 刪除语句</span></span><br><span class="line">sql = <span class="string">&quot;DELETE FROM EMPLOYEE WHERE AGE &gt; &#123;&#125;&quot;</span>.<span class="built_in">format</span>(<span class="number">20</span>)</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    cursor.execute(sql)</span><br><span class="line">    <span class="comment"># 提交到数据库执行</span></span><br><span class="line">    db.commit()</span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">    <span class="comment"># 发生错误时回滚</span></span><br><span class="line">    db.rollback()</span><br></pre></td></tr></table></figure>
+
+
+<p>第四步：关闭游标，数据库连接</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cursor.close()</span><br><span class="line">db.close()</span><br></pre></td></tr></table></figure>
+
+<h4 id="通过控制台向数据库插入数据"><a href="#通过控制台向数据库插入数据" class="headerlink" title="通过控制台向数据库插入数据"></a>通过控制台向数据库插入数据</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">@Time    : 2020/5/11 14:24</span></span><br><span class="line"><span class="string">@Software: PyCharm</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line">host = <span class="string">&#x27;127.0.0.1&#x27;</span></span><br><span class="line">port = <span class="number">3306</span></span><br><span class="line">user = <span class="string">&#x27;root&#x27;</span></span><br><span class="line">password = <span class="string">&#x27;123456&#x27;</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Starting the create database operation, please enter the information required for the database.&#x27;</span>)</span><br><span class="line"><span class="comment"># print(&#x27;------------------------------------&#x27;)</span></span><br><span class="line"><span class="comment"># host = input(&#x27;please input database host:&#x27;)</span></span><br><span class="line"><span class="comment"># port = input(&#x27;please input database port:&#x27;)</span></span><br><span class="line"><span class="comment"># user = input(&#x27;please input database user:&#x27;)</span></span><br><span class="line"><span class="comment"># password = input(&#x27;please input database password:&#x27;)</span></span><br><span class="line"><span class="comment"># print(&#x27;------------------------------------&#x27;)</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    conn = pymysql.connect(host=host, port=<span class="built_in">int</span>(port), user=user, password=password)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;create database...&#x27;</span>)</span><br><span class="line">    cur = conn.cursor()</span><br><span class="line">    cur.execute(<span class="string">&#x27;create database if not exists book&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;database created done.&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;------------------------------------&#x27;</span>)</span><br><span class="line">    conn.select_db(<span class="string">&#x27;book&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;create user table...&#x27;</span>)</span><br><span class="line">    cur.execute(<span class="string">&quot;CREATE TABLE IF NOT EXISTS user (&quot;</span></span><br><span class="line">                <span class="string">&quot;id varchar(50) PRIMARY KEY,&quot;</span></span><br><span class="line">                <span class="string">&quot;username varchar(255),&quot;</span></span><br><span class="line">                <span class="string">&quot;password varchar(255),&quot;</span></span><br><span class="line">                <span class="string">&quot;role int(11),&quot;</span></span><br><span class="line">                <span class="string">&quot;create_time datetime,&quot;</span></span><br><span class="line">                <span class="string">&quot;delete_flag int(11),&quot;</span></span><br><span class="line">                <span class="string">&quot;current_login_time datetime)&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;user table created done.&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;------------------------------------&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;create book table...&#x27;</span>)</span><br><span class="line">    cur.execute(<span class="string">&quot;CREATE TABLE IF NOT EXISTS book(&quot;</span></span><br><span class="line">                <span class="string">&quot;id varchar(50) PRIMARY KEY,&quot;</span></span><br><span class="line">                <span class="string">&quot;book_name varchar(255),&quot;</span></span><br><span class="line">                <span class="string">&quot;author varchar(255),&quot;</span></span><br><span class="line">                <span class="string">&quot;publish_company varchar(255),&quot;</span></span><br><span class="line">                <span class="string">&quot;store_number int(11),&quot;</span></span><br><span class="line">                <span class="string">&quot;borrow_number int(11),&quot;</span></span><br><span class="line">                <span class="string">&quot;create_time datetime,&quot;</span></span><br><span class="line">                <span class="string">&quot;publish_date datetime)&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;book table created done.&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;------------------------------------&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;create borrow_info table...&#x27;</span>)</span><br><span class="line">    cur.execute(<span class="string">&quot;CREATE TABLE IF NOT EXISTS borrow_info (&quot;</span></span><br><span class="line">                <span class="string">&quot;id varchar(50) PRIMARY KEY,&quot;</span></span><br><span class="line">                <span class="string">&quot;book_id varchar(50),&quot;</span></span><br><span class="line">                <span class="string">&quot;book_name varchar(255),&quot;</span></span><br><span class="line">                <span class="string">&quot;borrow_user varchar(255),&quot;</span></span><br><span class="line">                <span class="string">&quot;borrow_num int(11),&quot;</span></span><br><span class="line">                <span class="string">&quot;borrow_days int(11),&quot;</span></span><br><span class="line">                <span class="string">&quot;borrow_time datetime,&quot;</span></span><br><span class="line">                <span class="string">&quot;return_time datetime,&quot;</span></span><br><span class="line">                <span class="string">&quot;return_flag int(11))&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;borrow_info table created done.&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;------------------------------------&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;create ask_return table...&#x27;</span>)</span><br><span class="line">    cur.execute(<span class="string">&quot;create table if not exists ask_return (&quot;</span></span><br><span class="line">                <span class="string">&quot;id int(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,&quot;</span></span><br><span class="line">                <span class="string">&quot;user_name varchar(50) NOT NULL,&quot;</span></span><br><span class="line">                <span class="string">&quot;borrow_id varchar(50) NOT NULL,&quot;</span></span><br><span class="line">                <span class="string">&quot;is_read int(11) NOT NULL,&quot;</span></span><br><span class="line">                <span class="string">&quot;time datetime)&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;ask_return table created done.&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;-&#x27;</span>*<span class="number">30</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;operate done.&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;create database successful.&#x27;</span>)</span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;the require information of database is correct, please check it and retry.&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(e.args)</span><br><span class="line">    <span class="keyword">import</span> traceback</span><br><span class="line">    traceback.print_exc()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;create database failed.&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Is insert some sample data into the database?&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;1. insert&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;2. exit&#x27;</span>)</span><br><span class="line">insert_tag = <span class="built_in">input</span>(<span class="string">&#x27;please select the option:&#x27;</span>)</span><br><span class="line"><span class="keyword">if</span> insert_tag == <span class="string">&#x27;1&#x27;</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;------------------------------------&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;starting the insert data operation...&#x27;</span>)</span><br><span class="line">    admin_data = [<span class="string">&#x27;12644064935811ea9063d8c497639e37&#x27;</span>, <span class="string">&#x27;admin&#x27;</span>, <span class="string">&#x27;21232f297a57a5a743894a0e4a801fc3&#x27;</span>, <span class="number">0</span>,</span><br><span class="line">                  <span class="string">&#x27;2020-05-11 15:23:12&#x27;</span>, <span class="number">0</span>, <span class="string">&#x27;2020-05-11 15:24:23&#x27;</span>]</span><br><span class="line">    user_data = [<span class="string">&#x27;99477a9e935811ea8171d8c497639e37&#x27;</span>, <span class="string">&#x27;zhangsan&#x27;</span>, <span class="string">&#x27;e10adc3949ba59abbe56e057f20f883e&#x27;</span>, <span class="number">1</span>,</span><br><span class="line">                 <span class="string">&#x27;2020-05-11 15:23:12&#x27;</span>, <span class="number">0</span>, <span class="string">&#x27;2020-05-11 15:24:23&#x27;</span>]</span><br><span class="line">    sql = <span class="string">&#x27;insert into user (id, username, password, role, create_time, delete_flag, current_login_time) values(%s,%s,&#x27;</span>\</span><br><span class="line">          <span class="string">&#x27;%s,%s,%s,%s,%s)&#x27;</span></span><br><span class="line">    cur.execute(sql, admin_data)</span><br><span class="line">    cur.execute(sql, user_data)</span><br><span class="line">    conn.commit()</span><br><span class="line">    cur.close()</span><br><span class="line">    conn.close()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;insert operation done.&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;------------------------------------&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Now you can use admin account login with username=&quot;admin&quot; password=&quot;admin&quot; or use the normal account login&#x27;</span></span><br><span class="line">          <span class="string">&#x27;with username=&quot;zhangsan&quot; password=&quot;123456&quot;.&#x27;</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;system exit.&#x27;</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2019/03/01/python%E5%9F%BA%E7%A1%80/20190301_%E8%AE%BF%E9%97%AE%E6%95%B0%E6%8D%AE%E5%BA%93/" data-id="ckqd7wfut001jogtg1856h5ln" data-title="python访问数据库" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python%E5%9F%BA%E7%A1%80/" rel="tag">python基础</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/03/02/python%E5%9F%BA%E7%A1%80/20190302_sqlalchemy%E7%9A%84%E4%B8%80%E4%BA%9B%E6%A6%82%E5%BF%B5/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          sqlalchemy的一些概念
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/02/28/python%E5%9F%BA%E7%A1%80/20190228_%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">python网络编程</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/python/fastapi/">fastapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/flask/">flask</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/python%E5%9F%BA%E7%A1%80/">python基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/python%E6%A1%88%E4%BE%8B/">python案例</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/">爬虫</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/pyppeteer/">pyppeteer</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/scrapy/">scrapy</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/selenium/">selenium</a></li></ul></li></ul></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/fastapi/" rel="tag">fastapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/flask/" rel="tag">flask</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pyppeteer/" rel="tag">pyppeteer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python3/" rel="tag">python3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python%E5%9F%BA%E7%A1%80/" rel="tag">python基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python%E6%A1%88%E4%BE%8B/" rel="tag">python案例</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scrapy/" rel="tag">scrapy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/selenium/" rel="tag">selenium</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%A3%E7%A0%81%E9%9B%A8/" rel="tag">代码雨</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8D%E7%88%AC/" rel="tag">反爬</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/fastapi/" style="font-size: 10px;">fastapi</a> <a href="/tags/flask/" style="font-size: 10px;">flask</a> <a href="/tags/pyppeteer/" style="font-size: 12px;">pyppeteer</a> <a href="/tags/python/" style="font-size: 18px;">python</a> <a href="/tags/python3/" style="font-size: 10px;">python3</a> <a href="/tags/python%E5%9F%BA%E7%A1%80/" style="font-size: 20px;">python基础</a> <a href="/tags/python%E6%A1%88%E4%BE%8B/" style="font-size: 12px;">python案例</a> <a href="/tags/scrapy/" style="font-size: 14px;">scrapy</a> <a href="/tags/selenium/" style="font-size: 12px;">selenium</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E9%9B%A8/" style="font-size: 10px;">代码雨</a> <a href="/tags/%E5%8F%8D%E7%88%AC/" style="font-size: 10px;">反爬</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 16px;">爬虫</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/06/26/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/02/my_application/20201202_%E5%B0%86excel%E4%B8%AD%E7%9A%84%E5%86%85%E5%AE%B9%E5%AD%98%E5%85%A5mysql/">将excel中的内容存入mysql</a>
+          </li>
+        
+          <li>
+            <a href="/2020/10/15/my_application/20201015_%E4%BB%A3%E7%A0%81%E9%9B%A8/">用python实现代码雨（电影黑客帝国里的效果，代码可直接运行）</a>
+          </li>
+        
+          <li>
+            <a href="/2020/09/29/spider/20200929_%E4%B8%89%E7%A7%8D%E5%8A%A0%E5%AF%86%E6%96%B9%E5%BC%8F/">三种加密方式 sha1加密、MD5加密、Base64加密 (附H5源码和js源码)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/07/15/spider/scrapy/20200715_%20ajaxcrawl/">scrapy源码12 - ajaxcrawl</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>python网络编程 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="UDP 协议（User Datagram Protocol 用户数据报协议）         面向无连接，传输数据之前源端和目的端不需要建立连接          发送出去的数据不一定会接收得到          传输速率快、效率高">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python网络编程">
+<meta property="og:url" content="http://example.com/2019/02/28/python%E5%9F%BA%E7%A1%80/20190228_%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="UDP 协议（User Datagram Protocol 用户数据报协议）         面向无连接，传输数据之前源端和目的端不需要建立连接          发送出去的数据不一定会接收得到          传输速率快、效率高">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190724183726453.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2N1aV95b25naHVh,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2019-02-28T07:24:20.000Z">
+<meta property="article:modified_time" content="2020-12-03T11:58:53.000Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="python基础">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190724183726453.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2N1aV95b25naHVh,size_16,color_FFFFFF,t_70">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-python基础/20190228_网络编程" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2019/02/28/python%E5%9F%BA%E7%A1%80/20190228_%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="article-date">
+  <time class="dt-published" datetime="2019-02-28T07:24:20.000Z" itemprop="datePublished">2019-02-28</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/python/">python</a>►<a class="article-category-link" href="/categories/python/python%E5%9F%BA%E7%A1%80/">python基础</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      python网络编程
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>UDP 协议（User Datagram Protocol 用户数据报协议）</p>
+<pre><code>        面向无连接，传输数据之前源端和目的端不需要建立连接
+
+        发送出去的数据不一定会接收得到
+
+        传输速率快、效率高
+</code></pre>
+<span id="more"></span>
+
+<p>TCP 协议（Transmission Control Protocol传输控制协议）</p>
+<pre><code>        面向连接，传输数据之前需要建立连接
+
+        在连接过程中进行大量的数据传输
+
+        安全可靠的传输协议
+
+        传输速度慢、效率低
+</code></pre>
+<p>TCP 与 UDP 的主要区别</p>
+<pre><code>        1.TCP是面向连接的；UDP是无连接的
+
+        2.TCP的每个连接都是点对点的，即一对一进行；UDP的连接支持一对一，一对多，多对一以及多对多
+
+        3.TCP的传输比较安全可靠；UDP的传输则不那么可靠
+
+        4.TCP的传输比较较慢，但可以保证数据的顺序；UDP的传输速度较快，但不可保证数据的顺序
+
+        5.在对系统资源的要求上：TCP占用较多的系统资源；UDP只需少量的系统资源
+</code></pre>
+<p>​<br>​<br>​            </p>
+<h5 id="1-udp网络程序-发送数据"><a href="#1-udp网络程序-发送数据" class="headerlink" title="1. udp网络程序-发送数据"></a>1. udp网络程序-发送数据</h5><p>创建一个基于udp的网络程序，具体步骤如下：</p>
+<ol>
+<li>创建客户端套接字</li>
+<li>发送/接收数据</li>
+<li>关闭套接字</li>
+</ol>
+<p><img src="https://img-blog.csdnimg.cn/20190724183726453.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2N1aV95b25naHVh,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>方式1：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> socket <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 创建udp套接字</span></span><br><span class="line">udp_socket = socket(AF_INET, SOCK_DGRAM)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 准备接收方的地址</span></span><br><span class="line"><span class="comment"># &#x27;192.168.1.103&#x27;表示目的ip地址</span></span><br><span class="line"><span class="comment"># 8080表示目的端口</span></span><br><span class="line">dest_addr = (<span class="string">&#x27;127.0.0.1&#x27;</span>, <span class="number">6666</span>)  <span class="comment"># 注意 是元组，ip是字符串，端口是数字</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 从键盘获取数据</span></span><br><span class="line">send_data = <span class="built_in">input</span>(<span class="string">&quot;请输入要发送的数据:&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 发送数据到指定的电脑上的指定程序中</span></span><br><span class="line">udp_socket.sendto(send_data.encode(<span class="string">&#x27;gbk&#x27;</span>), dest_addr)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 5. 关闭套接字</span></span><br><span class="line">udp_socket.close()</span><br></pre></td></tr></table></figure>
+<p>方式2：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    <span class="comment"># 1. 创建udp套接字</span></span><br><span class="line">    udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 2. 准备接收方的地址</span></span><br><span class="line">    dest_addr = (<span class="string">&#x27;127.0.0.1&#x27;</span>, <span class="number">6666</span>)  <span class="comment"># 注意 是元组，ip是字符串，端口是数字</span></span><br><span class="line">    <span class="comment"># 3. 从键盘获取数据</span></span><br><span class="line">    send_data = <span class="built_in">input</span>(<span class="string">&quot;请输入要发送的数据:&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 4. 发送数据到指定的电脑上的指定程序中</span></span><br><span class="line">    udp_socket.sendto(send_data.encode(<span class="string">&#x27;gbk&#x27;</span>), dest_addr)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 5. 关闭套接字</span></span><br><span class="line">    udp_socket.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+<p>方式3：可连续发送数据</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    <span class="comment"># 1. 创建udp套接字</span></span><br><span class="line">    udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        <span class="comment"># 2.从键盘获取数据</span></span><br><span class="line">        send_data = <span class="built_in">input</span>(<span class="string">&quot;请输入要发送的数据:&quot;</span>)</span><br><span class="line">        <span class="comment"># 3. 如果用户输入exit，就退出程序</span></span><br><span class="line">        <span class="keyword">if</span> send_data == <span class="string">&quot;exit&quot;</span>:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        <span class="comment"># 4. 发送数据到指定的电脑上的指定程序中</span></span><br><span class="line">        udp_socket.sendto(send_data.encode(<span class="string">&#x27;gbk&#x27;</span>), (<span class="string">&#x27;127.0.0.1&#x27;</span>, <span class="number">6666</span>))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 5. 关闭套接字</span></span><br><span class="line">    udp_socket.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+<h5 id="2-udp网络程序-发送、接收数据"><a href="#2-udp网络程序-发送、接收数据" class="headerlink" title="2. udp网络程序-发送、接收数据"></a>2. udp网络程序-发送、接收数据</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> socket <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 创建udp套接字</span></span><br><span class="line">udp_socket = socket(AF_INET, SOCK_DGRAM)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 准备接收方的地址</span></span><br><span class="line">dest_addr = (<span class="string">&#x27;10.17.16.153&#x27;</span>, <span class="number">8888</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 从键盘获取数据</span></span><br><span class="line">send_data = <span class="built_in">input</span>(<span class="string">&quot;请输入要发送的数据:&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 发送数据到指定的电脑上</span></span><br><span class="line">udp_socket.sendto(send_data.encode(<span class="string">&#x27;utf-8&#x27;</span>), dest_addr)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 5. 等待接收对方发送的数据</span></span><br><span class="line">recv_data = udp_socket.recvfrom(<span class="number">1024</span>)  <span class="comment"># 1024表示本次接收的最大字节数</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 6. 显示对方发送的数据</span></span><br><span class="line"><span class="comment"># 接收到的数据recv_data是一个元组</span></span><br><span class="line"><span class="comment"># 第1个元素是对方发送的数据</span></span><br><span class="line"><span class="comment"># 第2个元素是对方的ip和端口</span></span><br><span class="line"><span class="built_in">print</span>(recv_data[<span class="number">0</span>].decode(<span class="string">&#x27;gbk&#x27;</span>))</span><br><span class="line"><span class="built_in">print</span>(recv_data[<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 7. 关闭套接字</span></span><br><span class="line">udp_socket.close()</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="牛客网案例"><a href="#牛客网案例" class="headerlink" title="牛客网案例"></a>牛客网案例</h3><ol>
+<li>服务端：使用 socket 模块的 <strong>socket</strong> 函数来创建一个 socket 对象。socket 对象可以通过调用其他函数来设置一个 socket 服务。</li>
+</ol>
+<p>现在我们可以通过调用 <strong>bind(hostname, port)</strong> 函数来指定服务的 *port(端口)*。</p>
+<p>接着，我们调用 socket 对象的 <em>accept</em> 方法。该方法等待客户端的连接，并返回 <em>connection</em> 对象，表示已连接到客户端。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python3</span></span><br><span class="line"><span class="comment"># 文件名：server.py</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 导入 socket、sys 模块</span></span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建 socket 对象</span></span><br><span class="line">serversocket = socket.socket(</span><br><span class="line">            socket.AF_INET, socket.SOCK_STREAM) </span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取本地主机名</span></span><br><span class="line">host = socket.gethostname()</span><br><span class="line"></span><br><span class="line">port = <span class="number">9999</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 绑定端口号</span></span><br><span class="line">serversocket.bind((host, port))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置最大连接数，超过后排队</span></span><br><span class="line">serversocket.listen(<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="comment"># 建立客户端连接</span></span><br><span class="line">    clientsocket,addr = serversocket.accept()      </span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;连接地址: %s&quot;</span> % <span class="built_in">str</span>(addr))</span><br><span class="line"></span><br><span class="line">    msg=<span class="string">&#x27;欢迎访问牛客教程！&#x27;</span>+ <span class="string">&quot;\r\n&quot;</span></span><br><span class="line">    clientsocket.send(msg.encode(<span class="string">&#x27;utf-8&#x27;</span>))</span><br><span class="line">    clientsocket.close()</span><br></pre></td></tr></table></figure>
+
+
+
+<ol start="2">
+<li><p>客户端：</p>
+<p>接下来我们写一个简单的客户端实例连接到以上创建的服务。端口号为 9999。</p>
+<p><strong>socket.connect(hosname, port )</strong> 方法打开一个 TCP 连接到主机为 <em>hostname</em> 端口为 <em>port</em> 的服务商。连接后我们就可以从服务端获取数据，记住，操作完成后需要关闭连接。</p>
+</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python3</span></span><br><span class="line"><span class="comment"># 文件名：client.py</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 导入 socket、sys 模块</span></span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建 socket 对象</span></span><br><span class="line">s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) </span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取本地主机名</span></span><br><span class="line">host = socket.gethostname() </span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置端口号</span></span><br><span class="line">port = <span class="number">9999</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 连接服务，指定主机和端口</span></span><br><span class="line">s.connect((host, port))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 接收小于 1024 字节的数据</span></span><br><span class="line">msg = s.recv(<span class="number">1024</span>)</span><br><span class="line"></span><br><span class="line">s.close()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> (msg.decode(<span class="string">&#x27;utf-8&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2019/02/28/python%E5%9F%BA%E7%A1%80/20190228_%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" data-id="ckqd7wfur001fogtg0tml19v8" data-title="python网络编程" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python%E5%9F%BA%E7%A1%80/" rel="tag">python基础</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/03/01/python%E5%9F%BA%E7%A1%80/20190301_%E8%AE%BF%E9%97%AE%E6%95%B0%E6%8D%AE%E5%BA%93/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          python访问数据库
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/02/26/python%E5%9F%BA%E7%A1%80/20190226_%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">python文件操作</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/python/fastapi/">fastapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/flask/">flask</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/python%E5%9F%BA%E7%A1%80/">python基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/python%E6%A1%88%E4%BE%8B/">python案例</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/">爬虫</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/pyppeteer/">pyppeteer</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/scrapy/">scrapy</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/selenium/">selenium</a></li></ul></li></ul></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/fastapi/" rel="tag">fastapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/flask/" rel="tag">flask</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pyppeteer/" rel="tag">pyppeteer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python3/" rel="tag">python3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python%E5%9F%BA%E7%A1%80/" rel="tag">python基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python%E6%A1%88%E4%BE%8B/" rel="tag">python案例</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scrapy/" rel="tag">scrapy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/selenium/" rel="tag">selenium</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%A3%E7%A0%81%E9%9B%A8/" rel="tag">代码雨</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8D%E7%88%AC/" rel="tag">反爬</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/fastapi/" style="font-size: 10px;">fastapi</a> <a href="/tags/flask/" style="font-size: 10px;">flask</a> <a href="/tags/pyppeteer/" style="font-size: 12px;">pyppeteer</a> <a href="/tags/python/" style="font-size: 18px;">python</a> <a href="/tags/python3/" style="font-size: 10px;">python3</a> <a href="/tags/python%E5%9F%BA%E7%A1%80/" style="font-size: 20px;">python基础</a> <a href="/tags/python%E6%A1%88%E4%BE%8B/" style="font-size: 12px;">python案例</a> <a href="/tags/scrapy/" style="font-size: 14px;">scrapy</a> <a href="/tags/selenium/" style="font-size: 12px;">selenium</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E9%9B%A8/" style="font-size: 10px;">代码雨</a> <a href="/tags/%E5%8F%8D%E7%88%AC/" style="font-size: 10px;">反爬</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 16px;">爬虫</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/06/26/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/02/my_application/20201202_%E5%B0%86excel%E4%B8%AD%E7%9A%84%E5%86%85%E5%AE%B9%E5%AD%98%E5%85%A5mysql/">将excel中的内容存入mysql</a>
+          </li>
+        
+          <li>
+            <a href="/2020/10/15/my_application/20201015_%E4%BB%A3%E7%A0%81%E9%9B%A8/">用python实现代码雨（电影黑客帝国里的效果，代码可直接运行）</a>
+          </li>
+        
+          <li>
+            <a href="/2020/09/29/spider/20200929_%E4%B8%89%E7%A7%8D%E5%8A%A0%E5%AF%86%E6%96%B9%E5%BC%8F/">三种加密方式 sha1加密、MD5加密、Base64加密 (附H5源码和js源码)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/07/15/spider/scrapy/20200715_%20ajaxcrawl/">scrapy源码12 - ajaxcrawl</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

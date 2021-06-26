@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>scrapy源码6：deffer和parallel的源码分析 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="deferscrapy的核心的代码大量用到deffer对象，还有一些并行的东西。 这里简单去学习下deffer和并行的方法知识 。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="scrapy源码6：deffer和parallel的源码分析">
+<meta property="og:url" content="http://example.com/2020/07/07/spider/scrapy/20200707_deffer%E5%92%8Cparallel/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="deferscrapy的核心的代码大量用到deffer对象，还有一些并行的东西。 这里简单去学习下deffer和并行的方法知识 。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-07-07T02:35:00.000Z">
+<meta property="article:modified_time" content="2020-10-23T08:54:19.000Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="爬虫">
+<meta property="article:tag" content="scrapy">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-spider/scrapy/20200707_deffer和parallel" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2020/07/07/spider/scrapy/20200707_deffer%E5%92%8Cparallel/" class="article-date">
+  <time class="dt-published" datetime="2020-07-07T02:35:00.000Z" itemprop="datePublished">2020-07-07</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/python/">python</a>►<a class="article-category-link" href="/categories/python/%E7%88%AC%E8%99%AB/">爬虫</a>►<a class="article-category-link" href="/categories/python/%E7%88%AC%E8%99%AB/scrapy/">scrapy</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      scrapy源码6：deffer和parallel的源码分析
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h4 id="defer"><a href="#defer" class="headerlink" title="defer"></a>defer</h4><p>scrapy的核心的代码大量用到deffer对象，还有一些并行的东西。 这里简单去学习下deffer和并行的方法知识 。</p>
+<span id="more"></span>
+<p>twisted.interet.defer 这个官方的api就是下面的网址了。<br><a target="_blank" rel="noopener" href="http://twistedmatrix.com/documents/current/api/twisted.internet.defer.html">http://twistedmatrix.com/documents/current/api/twisted.internet.defer.html</a><br>我们可以看到这个defer是twisted提供的internet方法的包</p>
+<h4 id="twisted"><a href="#twisted" class="headerlink" title="twisted"></a>twisted</h4><p>先了解下twisted是个什么。<br>Twisted: The Framework Of Your Internet. 说明twisted是一个网络框架。<br><a target="_blank" rel="noopener" href="http://twistedmatrix.com/documents/current/api/twisted.html">http://twistedmatrix.com/documents/current/api/twisted.html</a> 这个官方api说的很精简啊， </p>
+<p>我们还是看看wiki上怎么说的: Twisted is an event-driven network programming framework written in Python and licensed under the MIT<br>License.<br>Twisted projects variously support TCP, UDP, SSL/TLS, IP multicast, Unix domain sockets, a large number of protocols (including HTTP, XMPP, NNTP, IMAP, SSH, IRC, FTP, and others), and much more. Twisted is based on the event-driven programming paradigm, which means that users of Twisted write short callbacks which are called by the framework.<br>大概意思如下：<br>Twisted是一个以Python编写的事件驱动的网络编程框架，并根据MIT许可证进行许可。<br>twisted的项目各种支持TCP，UDP，SSL / TLS，IP组播，Unix域套接字，大量协议<br>（包括HTTP，XMPP，NNTP，IMAP，SSH，IRC，FTP等）等等。<br>Twisted是基于事件驱动的编程范例，这意味着Twisted的用户写入框架调用的简短回调。</p>
+<p>知道twisted了， 还是应该了解下twisted的异步处理。<br>网址如下: <a target="_blank" rel="noopener" href="http://blog.csdn.net/fxjtoday/article/details/6396932">http://blog.csdn.net/fxjtoday/article/details/6396932</a><br>这个人的博客写的不错。 <a target="_blank" rel="noopener" href="http://blog.csdn.net/fangjian1204/article/details/42084273">http://blog.csdn.net/fangjian1204/article/details/42084273</a></p>
+<p>Method  addCallbacks    Add a pair of callbacks (success and error) to this Deferred.<br>Method  addCallback     Convenience method for adding just a callback.<br>Method  addErrback  Convenience method for adding just an errback.<br>Method  addBoth     Convenience method for adding a single callable as both a callback and an errback.</p>
+<p>这里有4个方法， addCallbacks,addBoth 一次添加成功和错误的2个回调。addCallback 添加成功的回调 ， addErrback 添加错误的回调。<br>Method  addTimeout  Time out this Deferred by scheduling it to be cancelled after timeout seconds.<br>        这个是设置下deferred的时间，超时的话会被取消的。<br>Method  chainDeferred   Chain another Deferred to this Deferred.</p>
+<p>Method  callback    Run all success callbacks that have been added to this Deferred.<br>    运行成功的回调<br>Method  errback     Run all error callbacks that have been added to this Deferred.<br>    运行所有的错误回调<br>Method  pause   Stop processing on a Deferred until unpause() is called.<br>    暂定deferred执行， 一直到unpause调用才继续执行<br>Method  unpause     Process all callbacks made since pause() was called.<br>    解除defered的pause的暂停操作<br>Method  cancel  Cancel this Deferred.<br>    取消这个defferd<br>Method  <strong>str</strong>     Return a string representation of this Deferred.<br>Method  <strong>iter</strong>    Undocumented<br>Method  send    Undocumented<br>Method  asFuture    Adapt a Deferred into a asyncio.Future which is bound to loop.<br>Class Method    fromFuture  Adapt an asyncio.Future to a Deferred.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line"><span class="comment"># 我们在defer.py里面有个方法如下 </span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parallel</span>(<span class="params">iterable, count, <span class="built_in">callable</span>, *args, **named</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;Execute a callable over the objects in the given iterable, in parallel,</span></span><br><span class="line"><span class="string">    using no more than ``count`` concurrent calls.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Taken from: http://jcalderone.livejournal.com/24285.html</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    coop = task.Cooperator()</span><br><span class="line">    work = (<span class="built_in">callable</span>(elem, *args, **named) <span class="keyword">for</span> elem <span class="keyword">in</span> iterable)</span><br><span class="line">    <span class="keyword">return</span> defer.DeferredList([coop.coiterate(work) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(count)])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 先来看看这个task.Cooperator 是什么</span></span><br><span class="line"><span class="comment"># Cooperator的官方api 网址： http://twistedmatrix.com/documents/current/api/twisted.internet.task.Cooperator.html</span></span><br><span class="line"><span class="comment"># google翻译了下如下： </span></span><br><span class="line"><span class="comment"># 合作任务调度程序。</span></span><br><span class="line"><span class="comment"># 合作任务是一个迭代器，每个迭代代表一个原子工作单元。当迭代器产生时，它允许合作者决定下一个执行其任务。如果迭代器产生defer.Deferred，</span></span><br><span class="line"><span class="comment"># 则工作将暂停，直到defer.Deferred触发并完成其回调链。</span></span><br><span class="line"><span class="comment"># 当合作者有多个任务时，它会在所有任务之间分配工作。</span></span><br><span class="line"><span class="comment"># 有两种方法可以向协作者添加任务，进行合作和协调。合作是更有用的两个，因为它返回一个CooperativeTask，可以暂停，恢复和等待。 </span></span><br><span class="line"><span class="comment"># coiterate具有相同的效果，但只返回一个延迟。当任务完成时触发。</span></span><br><span class="line"><span class="comment"># 合作者可以用于许多事情，包括但不限于：</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#     运行一个或多个计算密集型任务而不阻止</span></span><br><span class="line"><span class="comment">#     通过同时运行总任务的子集来限制并行性</span></span><br><span class="line"><span class="comment">#     做一件事，等待延期开火，做下一件事，重复（即序列化一系列异步任务）</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 多个合作者不能相互合作，所以在大多数情况下，您应该使用全局的合作伙伴。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Method    __init__    Create a scheduler-like object to which iterators may be added.</span></span><br><span class="line"><span class="comment">#     创建可以添加迭代器的类似于调度程序的对象。</span></span><br><span class="line"><span class="comment"># Method    coiterate   Add an iterator to the list of iterators this Cooperator is #currently running.</span></span><br><span class="line"><span class="comment">#     将迭代器添加到此Cooperator当前正在运行的迭代器列表中。</span></span><br><span class="line"><span class="comment"># Method    cooperate   Start running the given iterator as a long-running cooperative task, by calling next() on it as a periodic timed event.</span></span><br><span class="line"><span class="comment">#     开始运行给定的迭代器作为一个长期运行的协作任务，通过调用next（）作为定期定时事件。</span></span><br><span class="line"><span class="comment"># Method    start   Begin scheduling steps.</span></span><br><span class="line"><span class="comment">#     开始安排步骤</span></span><br><span class="line"><span class="comment"># Method    stop    Stop scheduling steps. Errback the completion Deferreds of all iterators which have been added and forget about them.</span></span><br><span class="line"><span class="comment">#     停止调度步骤。 Errback完成所有迭代器已被添加并忘记了它们。</span></span><br><span class="line"><span class="comment"># Method    running     Is this Cooperator is currently running?</span></span><br><span class="line"><span class="comment">#     这个合作伙伴是否正在运行？</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 回到那个代码吧。 第一句    coop = task.Cooperator() 创建一个合作者对象。</span></span><br><span class="line"><span class="comment">#  work = (callable(elem, *args, **named) for elem in iterable) 遍历下iterable方法列表， 构造works元组</span></span><br><span class="line"><span class="comment"># coop.coiterate(work) 每一个work都去调用这个方法添加到coop中去， 返回一个deferred数组， 然后转化为defer.DeferredList</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">process_chain</span>(<span class="params">callbacks, <span class="built_in">input</span>, *a, **kw</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;Return a Deferred built by chaining the given callbacks&quot;&quot;&quot;</span></span><br><span class="line">    d = defer.Deferred()</span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> callbacks:</span><br><span class="line">        d.addCallback(x, *a, **kw)</span><br><span class="line">    d.callback(<span class="built_in">input</span>)</span><br><span class="line">    <span class="keyword">return</span> d</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一个deferred对象， 添加一系列的成功回调方法， 然后执行所有的成功回调。 返回deffered对象。 </span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">process_chain_both</span>(<span class="params">callbacks, errbacks, <span class="built_in">input</span>, *a, **kw</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;Return a Deferred built by chaining the given callbacks and errbacks&quot;&quot;&quot;</span></span><br><span class="line">    d = defer.Deferred()</span><br><span class="line">    <span class="keyword">for</span> cb, eb <span class="keyword">in</span> <span class="built_in">zip</span>(callbacks, errbacks):</span><br><span class="line">        d.addCallbacks(cb, eb, callbackArgs=a, callbackKeywords=kw,</span><br><span class="line">            errbackArgs=a, errbackKeywords=kw)</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">isinstance</span>(<span class="built_in">input</span>, failure.Failure):</span><br><span class="line">        d.errback(<span class="built_in">input</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        d.callback(<span class="built_in">input</span>)</span><br><span class="line">    <span class="keyword">return</span> d</span><br><span class="line"></span><br><span class="line"><span class="comment"># 这个方法， 创建一个deferred对象， 添加成功和失败回调对。 </span></span><br><span class="line"><span class="comment"># 如果input是成功的就调用成功回调， 失败调用失败的回调。 </span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">process_parallel</span>(<span class="params">callbacks, <span class="built_in">input</span>, *a, **kw</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;Return a Deferred with the output of all successful calls to the given</span></span><br><span class="line"><span class="string">    callbacks</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    dfds = [defer.succeed(<span class="built_in">input</span>).addCallback(x, *a, **kw) <span class="keyword">for</span> x <span class="keyword">in</span> callbacks]</span><br><span class="line">    d = defer.DeferredList(dfds, fireOnOneErrback=<span class="number">1</span>, consumeErrors=<span class="number">1</span>)</span><br><span class="line">    d.addCallbacks(<span class="keyword">lambda</span> r: [x[<span class="number">1</span>] <span class="keyword">for</span> x <span class="keyword">in</span> r], <span class="keyword">lambda</span> f: f.value.subFailure)</span><br><span class="line">    <span class="keyword">return</span> d</span><br><span class="line"><span class="comment"># 遍历 callbacks列表， 使用addcallback添加成功的回调。 </span></span><br><span class="line"><span class="comment"># defer.succeed(input) 应该是返回一个deferred对象。 </span></span><br><span class="line"><span class="comment"># 查看下官方api。 </span></span><br><span class="line"><span class="comment"># Function  succeed     Return a Deferred that has already had .callback(result) called.</span></span><br><span class="line"><span class="comment"># 现获取一个dfds 的数组， 然后转为list ， 再有2个参数。</span></span><br><span class="line"><span class="comment"># 添加2个匿名的回调方法。</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2020/07/07/spider/scrapy/20200707_deffer%E5%92%8Cparallel/" data-id="ckqd7wfvi0035ogtg90ode5pt" data-title="scrapy源码6：deffer和parallel的源码分析" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/scrapy/" rel="tag">scrapy</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/07/08/spider/scrapy/20200708_downloader/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          scrapy源码7：downloader的源码分析
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/07/06/spider/pyppeteer/02_%E5%90%84%E7%A7%8D%E6%A1%88%E4%BE%8B/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">pyppeteer的各种案例</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/python/fastapi/">fastapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/flask/">flask</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/python%E5%9F%BA%E7%A1%80/">python基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/python%E6%A1%88%E4%BE%8B/">python案例</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/">爬虫</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/pyppeteer/">pyppeteer</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/scrapy/">scrapy</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/selenium/">selenium</a></li></ul></li></ul></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/fastapi/" rel="tag">fastapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/flask/" rel="tag">flask</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pyppeteer/" rel="tag">pyppeteer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python3/" rel="tag">python3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python%E5%9F%BA%E7%A1%80/" rel="tag">python基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python%E6%A1%88%E4%BE%8B/" rel="tag">python案例</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scrapy/" rel="tag">scrapy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/selenium/" rel="tag">selenium</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%A3%E7%A0%81%E9%9B%A8/" rel="tag">代码雨</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8D%E7%88%AC/" rel="tag">反爬</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/fastapi/" style="font-size: 10px;">fastapi</a> <a href="/tags/flask/" style="font-size: 10px;">flask</a> <a href="/tags/pyppeteer/" style="font-size: 12px;">pyppeteer</a> <a href="/tags/python/" style="font-size: 18px;">python</a> <a href="/tags/python3/" style="font-size: 10px;">python3</a> <a href="/tags/python%E5%9F%BA%E7%A1%80/" style="font-size: 20px;">python基础</a> <a href="/tags/python%E6%A1%88%E4%BE%8B/" style="font-size: 12px;">python案例</a> <a href="/tags/scrapy/" style="font-size: 14px;">scrapy</a> <a href="/tags/selenium/" style="font-size: 12px;">selenium</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E9%9B%A8/" style="font-size: 10px;">代码雨</a> <a href="/tags/%E5%8F%8D%E7%88%AC/" style="font-size: 10px;">反爬</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 16px;">爬虫</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/06/26/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/02/my_application/20201202_%E5%B0%86excel%E4%B8%AD%E7%9A%84%E5%86%85%E5%AE%B9%E5%AD%98%E5%85%A5mysql/">将excel中的内容存入mysql</a>
+          </li>
+        
+          <li>
+            <a href="/2020/10/15/my_application/20201015_%E4%BB%A3%E7%A0%81%E9%9B%A8/">用python实现代码雨（电影黑客帝国里的效果，代码可直接运行）</a>
+          </li>
+        
+          <li>
+            <a href="/2020/09/29/spider/20200929_%E4%B8%89%E7%A7%8D%E5%8A%A0%E5%AF%86%E6%96%B9%E5%BC%8F/">三种加密方式 sha1加密、MD5加密、Base64加密 (附H5源码和js源码)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/07/15/spider/scrapy/20200715_%20ajaxcrawl/">scrapy源码12 - ajaxcrawl</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

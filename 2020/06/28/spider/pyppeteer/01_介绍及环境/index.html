@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>pyppeteer的环境搭建，常见参数及2个案例 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="一. pyppeteer介绍Puppeteer是谷歌出品的一款基于Node.js开发的一款工具，主要是用来操纵Chrome浏览器的 API，通过Javascript代码来操纵Chrome浏览器，完成数据爬取、Web程序自动测试等任务。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pyppeteer的环境搭建，常见参数及2个案例">
+<meta property="og:url" content="http://example.com/2020/06/28/spider/pyppeteer/01_%E4%BB%8B%E7%BB%8D%E5%8F%8A%E7%8E%AF%E5%A2%83/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一. pyppeteer介绍Puppeteer是谷歌出品的一款基于Node.js开发的一款工具，主要是用来操纵Chrome浏览器的 API，通过Javascript代码来操纵Chrome浏览器，完成数据爬取、Web程序自动测试等任务。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200628190652622.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2N1aV95b25naHVh,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2020-06-28T02:30:00.000Z">
+<meta property="article:modified_time" content="2020-11-30T06:27:39.000Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="pyppeteer">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200628190652622.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2N1aV95b25naHVh,size_16,color_FFFFFF,t_70">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-spider/pyppeteer/01_介绍及环境" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2020/06/28/spider/pyppeteer/01_%E4%BB%8B%E7%BB%8D%E5%8F%8A%E7%8E%AF%E5%A2%83/" class="article-date">
+  <time class="dt-published" datetime="2020-06-28T02:30:00.000Z" itemprop="datePublished">2020-06-28</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/python/">python</a>►<a class="article-category-link" href="/categories/python/%E7%88%AC%E8%99%AB/">爬虫</a>►<a class="article-category-link" href="/categories/python/%E7%88%AC%E8%99%AB/pyppeteer/">pyppeteer</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      pyppeteer的环境搭建，常见参数及2个案例
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h4 id="一-pyppeteer介绍"><a href="#一-pyppeteer介绍" class="headerlink" title="一. pyppeteer介绍"></a>一. pyppeteer介绍</h4><p>Puppeteer是谷歌出品的一款基于Node.js开发的一款工具，主要是用来操纵Chrome浏览器的 API，通过Javascript代码来操纵Chrome浏览器，完成数据爬取、Web程序自动测试等任务。</p>
+<span id="more"></span>
+
+<p>Puppeteer 默认以 headless 模式运行，但是可以通过修改配置文件运行“有头”模式。</p>
+<p>Pyppeteer的两大特点，chromium浏览器和asyncio框架：</p>
+<ul>
+<li>Chromium是一款独立的浏览器，是Google为发展自家的浏览器Google Chrome而开启的计划，相当于Chrome的实验版，Chromium的稳定性不如Chrome但是功能更加丰富，而且更新速度很快，通常每隔数小时就有新的开发版本发布。</li>
+<li>asyncio是Python的一个异步协程库，自3.4版本引入的标准库，直接内置了对异步IO的支持。</li>
+</ul>
+<p>github地址：<a target="_blank" rel="noopener" href="https://github.com/puppeteer/puppeteer/blob/v2.1.1/docs/api.md">https://github.com/puppeteer/puppeteer/blob/v2.1.1/docs/api.md</a></p>
+<p>中文版教程：<a target="_blank" rel="noopener" href="https://zhaoqize.github.io/puppeteer-api-zh_CN/">https://zhaoqize.github.io/puppeteer-api-zh_CN/</a></p>
+<h5 id="二-环境搭建"><a href="#二-环境搭建" class="headerlink" title="二. 环境搭建"></a>二. 环境搭建</h5><ol>
+<li><p>国内无法访问 可以使用国内镜像</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install pyppeteer -i https://pypi.douban.com/simple</span><br></pre></td></tr></table></figure></li>
+<li><p>chromium下载地址：<a target="_blank" rel="noopener" href="https://npm.taobao.org/mirrors/chromium-browser-snapshots/">https://npm.taobao.org/mirrors/chromium-browser-snapshots/</a>，下载之后解压之后，通过executablePath属性指定运行浏览器了</p>
+</li>
+</ol>
+<h4 id="三-常见参数"><a href="#三-常见参数" class="headerlink" title="三. 常见参数"></a>三. 常见参数</h4><table>
+<thead>
+<tr>
+<th>属性</th>
+<th>数据类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>executablePath</td>
+<td>str</td>
+<td>chrome.exe运行的路径</td>
+</tr>
+<tr>
+<td>ignorehttpserrrors</td>
+<td>bool</td>
+<td>忽略https错误，默认false</td>
+</tr>
+<tr>
+<td>headless</td>
+<td>bool</td>
+<td>True 开始无头浏览器 False关闭无头</td>
+</tr>
+<tr>
+<td>dumpio</td>
+<td>bool</td>
+<td>设置True 解决浏览器多开卡死</td>
+</tr>
+</tbody></table>
+<p>args的参数设置：<br>| 属性 | 数据类型 | 描述 |<br>| — | — | — |<br>| –disable-infobars | - | 关闭自动化提示框 |<br>| –window-size=1920,1080 | str | 设置浏览器大小吗，1920是宽，1080是宽 |<br>| –log-level=30 | str | 日志保存等级 |<br>| –start-maximized | - | 窗口最大化模式 |<br>| –proxy-server=<a target="_blank" rel="noopener" href="http://localhost:1080/">http://localhost:1080</a> | str | 设置代理 |<br>| userDataDir=D:\userData\ | str | 用户文件保存地址 |</p>
+<h4 id="四-使用案例"><a href="#四-使用案例" class="headerlink" title="四. 使用案例"></a>四. 使用案例</h4><h5 id="4-1-案例1"><a href="#4-1-案例1" class="headerlink" title="4.1 案例1"></a>4.1 案例1</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># -*- coding: UTF-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">from</span> pyppeteer <span class="keyword">import</span> launch</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    <span class="comment"># 浏览器 启动参数</span></span><br><span class="line">    start_parm = &#123;</span><br><span class="line">        <span class="comment"># 启动chrome的路径</span></span><br><span class="line">        <span class="string">&quot;executablePath&quot;</span>: <span class="string">r&quot;E:\tmp\chrome-win\chrome.exe&quot;</span>,</span><br><span class="line">        <span class="comment"># 关闭无头浏览器 默认是无头启动的</span></span><br><span class="line">        <span class="string">&quot;headless&quot;</span>: <span class="literal">False</span>,</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment"># 创建浏览器对象，可以传入 字典形式参数</span></span><br><span class="line">    browser = <span class="keyword">await</span> launch(**start_parm)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建一个页面对象， 页面操作在该对象上执行</span></span><br><span class="line">    page = <span class="keyword">await</span> browser.newPage()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">await</span> page.goto(<span class="string">&#x27;http://www.nows.fun/&#x27;</span>)  <span class="comment"># 页面跳转</span></span><br><span class="line">    page_text = <span class="keyword">await</span> page.content()  <span class="comment"># 页面内容</span></span><br><span class="line">    <span class="built_in">print</span>(page_text)</span><br><span class="line">    <span class="keyword">await</span> browser.close()  <span class="comment"># 关闭浏览器对象</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">asyncio.get_event_loop().run_until_complete(main())   <span class="comment"># 创建异步池并执行main函数。</span></span><br></pre></td></tr></table></figure>
+<p>执行结果如下图：<br><img src="https://img-blog.csdnimg.cn/20200628190652622.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2N1aV95b25naHVh,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h5 id="4-2-案例2-设置可视化参数，代码如下"><a href="#4-2-案例2-设置可视化参数，代码如下" class="headerlink" title="4.2 案例2: 设置可视化参数，代码如下"></a>4.2 案例2: 设置可视化参数，代码如下</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># !/usr/bin/python</span></span><br><span class="line"><span class="comment"># -*- coding: UTF-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">import</span> tkinter</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> pyppeteer <span class="keyword">import</span> launcher</span><br><span class="line"></span><br><span class="line"><span class="comment"># 注意 在导入launch之前先把默认参数改了</span></span><br><span class="line"><span class="comment"># 去除自动化 启动参数</span></span><br><span class="line">launcher.AUTOMATION_ARGS.remove(<span class="string">&quot;--enable-automation&quot;</span>)</span><br><span class="line"><span class="keyword">from</span> pyppeteer <span class="keyword">import</span> launch</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    <span class="comment"># 浏览器 启动参数</span></span><br><span class="line">    start_parm = &#123;</span><br><span class="line">        <span class="comment"># 启动chrome的路径</span></span><br><span class="line">        <span class="string">&quot;executablePath&quot;</span>: <span class="string">r&quot;E:\tmp\chrome-win\chrome.exe&quot;</span>,</span><br><span class="line">        <span class="comment"># 关闭无头浏览器</span></span><br><span class="line">        <span class="string">&quot;headless&quot;</span>: <span class="literal">False</span>,</span><br><span class="line">        <span class="string">&quot;args&quot;</span>: [</span><br><span class="line">            <span class="string">&#x27;--disable-infobars&#x27;</span>,  <span class="comment"># 关闭自动化提示框</span></span><br><span class="line">            <span class="string">&#x27;--no-sandbox&#x27;</span>,  <span class="comment"># 关闭沙盒模式</span></span><br><span class="line">            <span class="string">&#x27;--start-maximized&#x27;</span>,  <span class="comment"># 窗口最大化模式</span></span><br><span class="line">        ],</span><br><span class="line">    &#125;</span><br><span class="line">    browser = <span class="keyword">await</span> launch(**start_parm)</span><br><span class="line">    page = <span class="keyword">await</span> browser.newPage()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 查看当前 桌面视图大小</span></span><br><span class="line">    tk = tkinter.Tk()</span><br><span class="line">    width = tk.winfo_screenwidth()</span><br><span class="line">    height = tk.winfo_screenheight()</span><br><span class="line">    tk.quit()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&#x27;设置窗口为：width：<span class="subst">&#123;width&#125;</span> height：<span class="subst">&#123;height&#125;</span>&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 设置网页 视图大小</span></span><br><span class="line">    <span class="keyword">await</span> page.setViewport(viewport=&#123;<span class="string">&#x27;width&#x27;</span>: width, <span class="string">&#x27;height&#x27;</span>: height&#125;)</span><br><span class="line">    <span class="keyword">await</span> page.goto(<span class="string">&#x27;http://www.nows.fun/&#x27;</span>)</span><br><span class="line">    page_text = <span class="keyword">await</span> page.content()</span><br><span class="line">    <span class="built_in">print</span>(page_text)</span><br><span class="line">    <span class="keyword">await</span> browser.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">asyncio.get_event_loop().run_until_complete(main())</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2020/06/28/spider/pyppeteer/01_%E4%BB%8B%E7%BB%8D%E5%8F%8A%E7%8E%AF%E5%A2%83/" data-id="ckqd7wfvc002pogtg4jqzgnhx" data-title="pyppeteer的环境搭建，常见参数及2个案例" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/pyppeteer/" rel="tag">pyppeteer</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/06/30/spider/scrapy/20200630_engine/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          scrapy源码1：engine的源码分析
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/04/23/web/flask,tornado,fastapi%E7%9A%84%E6%AF%94%E8%BE%83/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">flask,tornado,fastapi 的比较</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/python/fastapi/">fastapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/flask/">flask</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/python%E5%9F%BA%E7%A1%80/">python基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/python%E6%A1%88%E4%BE%8B/">python案例</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/">爬虫</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/pyppeteer/">pyppeteer</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/scrapy/">scrapy</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/selenium/">selenium</a></li></ul></li></ul></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/fastapi/" rel="tag">fastapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/flask/" rel="tag">flask</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pyppeteer/" rel="tag">pyppeteer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python3/" rel="tag">python3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python%E5%9F%BA%E7%A1%80/" rel="tag">python基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python%E6%A1%88%E4%BE%8B/" rel="tag">python案例</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scrapy/" rel="tag">scrapy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/selenium/" rel="tag">selenium</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%A3%E7%A0%81%E9%9B%A8/" rel="tag">代码雨</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8D%E7%88%AC/" rel="tag">反爬</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/fastapi/" style="font-size: 10px;">fastapi</a> <a href="/tags/flask/" style="font-size: 10px;">flask</a> <a href="/tags/pyppeteer/" style="font-size: 12px;">pyppeteer</a> <a href="/tags/python/" style="font-size: 18px;">python</a> <a href="/tags/python3/" style="font-size: 10px;">python3</a> <a href="/tags/python%E5%9F%BA%E7%A1%80/" style="font-size: 20px;">python基础</a> <a href="/tags/python%E6%A1%88%E4%BE%8B/" style="font-size: 12px;">python案例</a> <a href="/tags/scrapy/" style="font-size: 14px;">scrapy</a> <a href="/tags/selenium/" style="font-size: 12px;">selenium</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E9%9B%A8/" style="font-size: 10px;">代码雨</a> <a href="/tags/%E5%8F%8D%E7%88%AC/" style="font-size: 10px;">反爬</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 16px;">爬虫</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/06/26/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/02/my_application/20201202_%E5%B0%86excel%E4%B8%AD%E7%9A%84%E5%86%85%E5%AE%B9%E5%AD%98%E5%85%A5mysql/">将excel中的内容存入mysql</a>
+          </li>
+        
+          <li>
+            <a href="/2020/10/15/my_application/20201015_%E4%BB%A3%E7%A0%81%E9%9B%A8/">用python实现代码雨（电影黑客帝国里的效果，代码可直接运行）</a>
+          </li>
+        
+          <li>
+            <a href="/2020/09/29/spider/20200929_%E4%B8%89%E7%A7%8D%E5%8A%A0%E5%AF%86%E6%96%B9%E5%BC%8F/">三种加密方式 sha1加密、MD5加密、Base64加密 (附H5源码和js源码)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/07/15/spider/scrapy/20200715_%20ajaxcrawl/">scrapy源码12 - ajaxcrawl</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

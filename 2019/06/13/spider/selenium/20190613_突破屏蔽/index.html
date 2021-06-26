@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>如何突破网站对selenium的屏蔽 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="使用selenium模拟浏览器进行数据抓取无疑是当下最通用的数据采集方案，它通吃各种数据加载方式，能够绕过客户JS加密，绕过爬虫检测，绕过签名机制。它的应用，使得许多网站的反采集策略形同虚设。由于selenium不会在HTTP请求数据中留下指纹，因此无法被网站直接识别和拦截。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何突破网站对selenium的屏蔽">
+<meta property="og:url" content="http://example.com/2019/06/13/spider/selenium/20190613_%E7%AA%81%E7%A0%B4%E5%B1%8F%E8%94%BD/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="使用selenium模拟浏览器进行数据抓取无疑是当下最通用的数据采集方案，它通吃各种数据加载方式，能够绕过客户JS加密，绕过爬虫检测，绕过签名机制。它的应用，使得许多网站的反采集策略形同虚设。由于selenium不会在HTTP请求数据中留下指纹，因此无法被网站直接识别和拦截。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-06-13T02:35:00.000Z">
+<meta property="article:modified_time" content="2020-10-23T08:46:00.000Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="爬虫">
+<meta property="article:tag" content="selenium">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-spider/selenium/20190613_突破屏蔽" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2019/06/13/spider/selenium/20190613_%E7%AA%81%E7%A0%B4%E5%B1%8F%E8%94%BD/" class="article-date">
+  <time class="dt-published" datetime="2019-06-13T02:35:00.000Z" itemprop="datePublished">2019-06-13</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/python/">python</a>►<a class="article-category-link" href="/categories/python/%E7%88%AC%E8%99%AB/">爬虫</a>►<a class="article-category-link" href="/categories/python/%E7%88%AC%E8%99%AB/selenium/">selenium</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      如何突破网站对selenium的屏蔽
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>使用selenium模拟浏览器进行数据抓取无疑是当下最通用的数据采集方案，它通吃各种数据加载方式，能够绕过客户JS加密，绕过爬虫检测，绕过签名机制。它的应用，使得许多网站的反采集策略形同虚设。由于selenium不会在HTTP请求数据中留下指纹，因此无法被网站直接识别和拦截。</p>
+<span id="more"></span>
+
+<p>这是不是就意味着selenium真的就无法被网站屏蔽了呢？非也。selenium在运行的时候会暴露出一些预定义的Javascript变量（特征字符串），例如”window.navigator.webdriver”，在非selenium环境下其值为undefined，而在selenium环境下，其值为true（如下图所示为selenium驱动下Chrome控制台打印出的值）。</p>
+<p>常见的特征串如下所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">webdriver  </span><br><span class="line">__driver_evaluate  </span><br><span class="line">__webdriver_evaluate  </span><br><span class="line">__selenium_evaluate  </span><br><span class="line">__fxdriver_evaluate  </span><br><span class="line">__driver_unwrapped  </span><br><span class="line">__webdriver_unwrapped  </span><br><span class="line">__selenium_unwrapped  </span><br><span class="line">__fxdriver_unwrapped  </span><br><span class="line">_Selenium_IDE_Recorder  </span><br><span class="line">_selenium  </span><br><span class="line">calledSelenium  </span><br><span class="line">_WEBDRIVER_ELEM_CACHE  </span><br><span class="line">ChromeDriverw  </span><br><span class="line">driver-evaluate  </span><br><span class="line">webdriver-evaluate  </span><br><span class="line">selenium-evaluate  </span><br><span class="line">webdriverCommand  </span><br><span class="line">webdriver-evaluate-response  </span><br><span class="line">__webdriverFunc  </span><br><span class="line">__webdriver_script_fn  </span><br><span class="line">__$webdriverAsyncExecutor  </span><br><span class="line">__lastWatirAlert  </span><br><span class="line">__lastWatirConfirm  </span><br><span class="line">__lastWatirPrompt  </span><br><span class="line">$chrome_asyncScriptInfo  </span><br><span class="line">$cdc_asdjflasutopfhvcZLmcfl_  </span><br></pre></td></tr></table></figure>
+
+<p>了解了这个特点之后，就可以在浏览器客户端JS中通过检测这些特征串来判断当前是否使用了selenium，并将检测结果附加到后续请求之中，这样服务端就能识别并拦截后续的请求。</p>
+<p>下面讲一个具体的例子。</p>
+<p>一个能够有效检测并屏蔽selenium的网站应用：大众点评网的验证码表单页，如果是正常的浏览器操作，能够有效的通过验证，但如果是使用selenium就会被识别，即便验证码输入正确，也会被提示“请求异常,拒绝操作”，无法通过验证</p>
+<p>可以看到它检测了”webdriver”, “__driver_evaluate”, “__webdriver_evaluate”等等这些selenium的特征串。提交验证码的时候抓包可以看到一个_token参数（很长），selenium检测结果应该就包含在该参数里，服务端借以判断“请求异常,拒绝操作”。</p>
+<p>现在才进入正题，如何突破网站的这种屏蔽呢？</p>
+<p>我们已经知道了屏蔽的原理，只要我们能够隐藏这些特征串就可以了。但是还不能直接删除这些属性，因为这样可能会导致selenium不能正常工作了。我们采用曲线救国的方法，使用中间人代理，比如fidder, proxy2.py或者mitmproxy，将JS文件（本例是yoda.*.js这个文件）中的特征字符串给过滤掉（或者替换掉，比如替换成根本不存在的特征串），让它无法正常工作，从而达到让客户端脚本检测不到selenium的效果。</p>
+<p>下面我们验证下这个思路。这里我们使用mitmproxy实现中间人代理），对JS文件（本例是yoda.*.js这个文件）内容进行过滤。启动mitmproxy代理并加载response处理脚本：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding:utf-8</span></span><br><span class="line"><span class="comment"># modify_response.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">from</span> mitmproxy <span class="keyword">import</span> ctx</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">response</span>(<span class="params">flow</span>):</span></span><br><span class="line"></span><br><span class="line">    <span class="string">&quot;&quot;&quot;修改应答数据&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> <span class="string">&#x27;/js/yoda.&#x27;</span> <span class="keyword">in</span> flow.request.url:</span><br><span class="line">        <span class="comment"># 屏蔽selenium检测</span></span><br><span class="line">        <span class="keyword">for</span> webdriver_key <span class="keyword">in</span> [<span class="string">&#x27;webdriver&#x27;</span>, <span class="string">&#x27;__driver_evaluate&#x27;</span>, <span class="string">&#x27;__webdriver_evaluate&#x27;</span>, <span class="string">&#x27;__selenium_evaluate&#x27;</span>, <span class="string">&#x27;__fxdriver_evaluate&#x27;</span>, <span class="string">&#x27;__driver_unwrapped&#x27;</span>, <span class="string">&#x27;__webdriver_unwrapped&#x27;</span>, <span class="string">&#x27;__selenium_unwrapped&#x27;</span>, <span class="string">&#x27;__fxdriver_unwrapped&#x27;</span>, <span class="string">&#x27;_Selenium_IDE_Recorder&#x27;</span>, <span class="string">&#x27;_selenium&#x27;</span>, <span class="string">&#x27;calledSelenium&#x27;</span>, <span class="string">&#x27;_WEBDRIVER_ELEM_CACHE&#x27;</span>, <span class="string">&#x27;ChromeDriverw&#x27;</span>, <span class="string">&#x27;driver-evaluate&#x27;</span>, <span class="string">&#x27;webdriver-evaluate&#x27;</span>, <span class="string">&#x27;selenium-evaluate&#x27;</span>, <span class="string">&#x27;webdriverCommand&#x27;</span>, <span class="string">&#x27;webdriver-evaluate-response&#x27;</span>, <span class="string">&#x27;__webdriverFunc&#x27;</span>, <span class="string">&#x27;__webdriver_script_fn&#x27;</span>, <span class="string">&#x27;__$webdriverAsyncExecutor&#x27;</span>, <span class="string">&#x27;__lastWatirAlert&#x27;</span>, <span class="string">&#x27;__lastWatirConfirm&#x27;</span>, <span class="string">&#x27;__lastWatirPrompt&#x27;</span>, <span class="string">&#x27;$chrome_asyncScriptInfo&#x27;</span>, <span class="string">&#x27;$cdc_asdjflasutopfhvcZLmcfl_&#x27;</span>]:</span><br><span class="line">            ctx.log.info(<span class="string">&#x27;Remove&quot;&#123;&#125;&quot;from&#123;&#125;.&#x27;</span>.<span class="built_in">format</span>(webdriver_key,flow.request.url))</span><br><span class="line">            flow.response.text=flow.response.text.replace(<span class="string">&#x27;&quot;&#123;&#125;&quot;&#x27;</span>.<span class="built_in">format</span>(webdriver_key),<span class="string">&#x27;&quot;NO-SUCH-ATTR&quot;&#x27;</span>)</span><br><span class="line">            flow.response.text=flow.response.text.replace(<span class="string">&#x27;t.webdriver&#x27;</span>,<span class="string">&#x27;false&#x27;</span>)</span><br><span class="line">            flow.response.text=flow.response.text.replace(<span class="string">&#x27;ChromeDriver&#x27;</span>,<span class="string">&#x27;&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+
+<p>解决方法：mitmproxy<br>因为mitmproxy可以拦截请求，所以在响应中，将包含的webdriver的JS中的关键字替换成其他的字符就可以了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="string">&quot;/_next/static/js/common_pdd&quot;</span> <span class="keyword">in</span> flow.request.url:</span><br><span class="line">    flow.response.text = flow.response.text.replace(<span class="string">&quot;webdriver&quot;</span>, <span class="string">&quot;userAgent&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2019/06/13/spider/selenium/20190613_%E7%AA%81%E7%A0%B4%E5%B1%8F%E8%94%BD/" data-id="ckqd7wfvs003xogtg6wc74dfi" data-title="如何突破网站对selenium的屏蔽" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/selenium/" rel="tag">selenium</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/07/03/spider/%E6%9C%89%E6%AF%92%E6%AE%B5%E5%AD%90%E7%88%AC%E8%99%AB/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          爬取心灵毒鸡汤、你好污啊 网站数据并存入本地txt文件
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/06/12/spider/selenium/20190612_%E9%9A%90%E5%BC%8F%E5%92%8C%E6%98%BE%E7%A4%BA%E7%AD%89%E5%BE%85/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Selenium显示等待和隐式等待的区别</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/python/fastapi/">fastapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/flask/">flask</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/python%E5%9F%BA%E7%A1%80/">python基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/python%E6%A1%88%E4%BE%8B/">python案例</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/">爬虫</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/pyppeteer/">pyppeteer</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/scrapy/">scrapy</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/selenium/">selenium</a></li></ul></li></ul></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/fastapi/" rel="tag">fastapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/flask/" rel="tag">flask</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pyppeteer/" rel="tag">pyppeteer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python3/" rel="tag">python3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python%E5%9F%BA%E7%A1%80/" rel="tag">python基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python%E6%A1%88%E4%BE%8B/" rel="tag">python案例</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scrapy/" rel="tag">scrapy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/selenium/" rel="tag">selenium</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%A3%E7%A0%81%E9%9B%A8/" rel="tag">代码雨</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8D%E7%88%AC/" rel="tag">反爬</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/fastapi/" style="font-size: 10px;">fastapi</a> <a href="/tags/flask/" style="font-size: 10px;">flask</a> <a href="/tags/pyppeteer/" style="font-size: 12px;">pyppeteer</a> <a href="/tags/python/" style="font-size: 18px;">python</a> <a href="/tags/python3/" style="font-size: 10px;">python3</a> <a href="/tags/python%E5%9F%BA%E7%A1%80/" style="font-size: 20px;">python基础</a> <a href="/tags/python%E6%A1%88%E4%BE%8B/" style="font-size: 12px;">python案例</a> <a href="/tags/scrapy/" style="font-size: 14px;">scrapy</a> <a href="/tags/selenium/" style="font-size: 12px;">selenium</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E9%9B%A8/" style="font-size: 10px;">代码雨</a> <a href="/tags/%E5%8F%8D%E7%88%AC/" style="font-size: 10px;">反爬</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 16px;">爬虫</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/06/26/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/02/my_application/20201202_%E5%B0%86excel%E4%B8%AD%E7%9A%84%E5%86%85%E5%AE%B9%E5%AD%98%E5%85%A5mysql/">将excel中的内容存入mysql</a>
+          </li>
+        
+          <li>
+            <a href="/2020/10/15/my_application/20201015_%E4%BB%A3%E7%A0%81%E9%9B%A8/">用python实现代码雨（电影黑客帝国里的效果，代码可直接运行）</a>
+          </li>
+        
+          <li>
+            <a href="/2020/09/29/spider/20200929_%E4%B8%89%E7%A7%8D%E5%8A%A0%E5%AF%86%E6%96%B9%E5%BC%8F/">三种加密方式 sha1加密、MD5加密、Base64加密 (附H5源码和js源码)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/07/15/spider/scrapy/20200715_%20ajaxcrawl/">scrapy源码12 - ajaxcrawl</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

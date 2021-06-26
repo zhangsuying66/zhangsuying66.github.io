@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>flask案例_登录和遍历操作 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="flask案例_登录和遍历操作, 直接运行app.py文件：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="flask案例_登录和遍历操作">
+<meta property="og:url" content="http://example.com/2019/04/20/flask/20190420_%E6%A1%88%E4%BE%8B_%E7%99%BB%E5%BD%95/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="flask案例_登录和遍历操作, 直接运行app.py文件：">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-04-20T02:35:00.000Z">
+<meta property="article:modified_time" content="2020-12-01T03:40:01.000Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="flask">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-flask/20190420_案例_登录" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2019/04/20/flask/20190420_%E6%A1%88%E4%BE%8B_%E7%99%BB%E5%BD%95/" class="article-date">
+  <time class="dt-published" datetime="2019-04-20T02:35:00.000Z" itemprop="datePublished">2019-04-20</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/python/">python</a>►<a class="article-category-link" href="/categories/python/flask/">flask</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      flask案例_登录和遍历操作
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>flask案例_登录和遍历操作, 直接运行app.py文件：</p>
+<span id="more"></span>
+
+
+<h4 id="app-py"><a href="#app-py" class="headerlink" title="app.py"></a>app.py</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- encoding: utf-8 -*-</span></span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask, render_template, request, redirect, session</span><br><span class="line"></span><br><span class="line"><span class="comment"># 实例化一个app</span></span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line">app.secret_key = <span class="string">&#x27;aaa&#x27;</span></span><br><span class="line">app.debug = <span class="literal">True</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">USER_DICT = &#123;</span><br><span class="line">    <span class="string">&#x27;1&#x27;</span>: &#123;<span class="string">&#x27;name&#x27;</span>: <span class="string">&#x27;大伟&#x27;</span>, <span class="string">&#x27;age&#x27;</span>: <span class="number">18</span>&#125;,</span><br><span class="line">    <span class="string">&#x27;2&#x27;</span>: &#123;<span class="string">&#x27;name&#x27;</span>: <span class="string">&#x27;张三&#x27;</span>, <span class="string">&#x27;age&#x27;</span>: <span class="number">8</span>&#125;,</span><br><span class="line">    <span class="string">&#x27;3&#x27;</span>: &#123;<span class="string">&#x27;name&#x27;</span>: <span class="string">&#x27;李四&#x27;</span>, <span class="string">&#x27;age&#x27;</span>: <span class="number">28</span>&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建视图函数，路由地址</span></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/login&#x27;</span>, methods=[<span class="string">&#x27;GET&#x27;</span>, <span class="string">&#x27;POST&#x27;</span>]</span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">login</span>():</span></span><br><span class="line">    <span class="keyword">if</span> request.method == <span class="string">&#x27;GET&#x27;</span>:</span><br><span class="line">        <span class="keyword">return</span> render_template(<span class="string">&#x27;login.html&#x27;</span>)</span><br><span class="line">    user = request.form.get(<span class="string">&#x27;user&#x27;</span>)  <span class="comment"># request.args 接收get方法的值</span></span><br><span class="line">    pwd = request.form.get(<span class="string">&#x27;pwd&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(user, pwd)</span><br><span class="line">    <span class="keyword">if</span> user == <span class="string">&#x27;tom&#x27;</span> <span class="keyword">and</span> pwd == <span class="string">&#x27;123&#x27;</span>:</span><br><span class="line">        session[<span class="string">&#x27;user_info&#x27;</span>] = user</span><br><span class="line">        <span class="keyword">return</span> redirect(<span class="string">&#x27;/index&#x27;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="comment"># 下面两种方式都可以</span></span><br><span class="line">        <span class="comment"># return render_template(&#x27;login.html&#x27;, msg=&#x27;用户名或密码错误&#x27;)</span></span><br><span class="line">        <span class="keyword">return</span> render_template(<span class="string">&#x27;login.html&#x27;</span>, **&#123;<span class="string">&#x27;msg&#x27;</span>: <span class="string">&#x27;用户名或密码错误~&#x27;</span>&#125;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/logout&#x27;</span></span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">logout</span>():</span></span><br><span class="line">    <span class="keyword">del</span> session[<span class="string">&#x27;user_info&#x27;</span>]</span><br><span class="line">    <span class="keyword">return</span> redirect(<span class="string">&#x27;/login&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/index&#x27;</span></span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span>():</span></span><br><span class="line">    user_info = session.get(<span class="string">&#x27;user_info&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> user_info:</span><br><span class="line">        <span class="keyword">return</span> redirect(<span class="string">&#x27;/login&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> render_template(<span class="string">&#x27;index.html&#x27;</span>, user_dict=USER_DICT)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/detail&#x27;</span></span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">detail</span>():</span></span><br><span class="line">    user_info = session.get(<span class="string">&#x27;user_info&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> user_info:</span><br><span class="line">        <span class="keyword">return</span> redirect(<span class="string">&#x27;/login&#x27;</span>)</span><br><span class="line">    uid = request.args.get(<span class="string">&#x27;uid&#x27;</span>)</span><br><span class="line">    info = USER_DICT.get(uid)</span><br><span class="line">    <span class="keyword">return</span> render_template(<span class="string">&#x27;detail.html&#x27;</span>, info=info)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    app.run(host=<span class="string">&#x27;0.0.0.0&#x27;</span>, port=<span class="number">9005</span>)</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="templates-login-html"><a href="#templates-login-html" class="headerlink" title="templates/login.html"></a>templates/login.html</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;zh-cn&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>休息系统-用户登录<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">form</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span>, <span class="attr">name</span>=<span class="string">&quot;user&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span>, <span class="attr">name</span>=<span class="string">&quot;pwd&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span>, <span class="attr">value</span>=<span class="string">&quot;提交&quot;</span>&gt;</span> &#123;&#123;msg&#125;&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<h4 id="templates-index-html"><a href="#templates-index-html" class="headerlink" title="templates/index.html"></a>templates/index.html</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Title<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">        &#123;% for k,v in user_dict.items() %&#125;</span><br><span class="line">            <span class="tag">&lt;<span class="name">li</span>&gt;</span>&#123;&#123;v.name&#125;&#125;<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;/detail?uid=&#123;&#123;k&#125;&#125;&quot;</span>&gt;</span>查看详细<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">        &#123;% endfor %&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="templates-detail-html"><a href="#templates-detail-html" class="headerlink" title="templates/detail.html"></a>templates/detail.html</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Title<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h2</span>&gt;</span>详细信息<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>&#123;&#123; info.name &#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>&#123;&#123; info.age &#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2019/04/20/flask/20190420_%E6%A1%88%E4%BE%8B_%E7%99%BB%E5%BD%95/" data-id="ckqd7wftx0001ogtg1s71825f" data-title="flask案例_登录和遍历操作" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/flask/" rel="tag">flask</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/05/26/spider/%E6%9C%89%E7%94%A8%E4%BB%A3%E7%A0%81/20190526_%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          爬虫定时任务汇总
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/03/13/python%E5%9F%BA%E7%A1%80/20190313_%E6%97%B6%E9%97%B4%E5%A4%84%E7%90%86/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">python时间处理</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/python/fastapi/">fastapi</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/flask/">flask</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/python%E5%9F%BA%E7%A1%80/">python基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/python%E6%A1%88%E4%BE%8B/">python案例</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/">爬虫</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/pyppeteer/">pyppeteer</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/scrapy/">scrapy</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/%E7%88%AC%E8%99%AB/selenium/">selenium</a></li></ul></li></ul></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/fastapi/" rel="tag">fastapi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/flask/" rel="tag">flask</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pyppeteer/" rel="tag">pyppeteer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python3/" rel="tag">python3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python%E5%9F%BA%E7%A1%80/" rel="tag">python基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python%E6%A1%88%E4%BE%8B/" rel="tag">python案例</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scrapy/" rel="tag">scrapy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/selenium/" rel="tag">selenium</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%A3%E7%A0%81%E9%9B%A8/" rel="tag">代码雨</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8D%E7%88%AC/" rel="tag">反爬</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/fastapi/" style="font-size: 10px;">fastapi</a> <a href="/tags/flask/" style="font-size: 10px;">flask</a> <a href="/tags/pyppeteer/" style="font-size: 12px;">pyppeteer</a> <a href="/tags/python/" style="font-size: 18px;">python</a> <a href="/tags/python3/" style="font-size: 10px;">python3</a> <a href="/tags/python%E5%9F%BA%E7%A1%80/" style="font-size: 20px;">python基础</a> <a href="/tags/python%E6%A1%88%E4%BE%8B/" style="font-size: 12px;">python案例</a> <a href="/tags/scrapy/" style="font-size: 14px;">scrapy</a> <a href="/tags/selenium/" style="font-size: 12px;">selenium</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E9%9B%A8/" style="font-size: 10px;">代码雨</a> <a href="/tags/%E5%8F%8D%E7%88%AC/" style="font-size: 10px;">反爬</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 16px;">爬虫</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/06/26/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/02/my_application/20201202_%E5%B0%86excel%E4%B8%AD%E7%9A%84%E5%86%85%E5%AE%B9%E5%AD%98%E5%85%A5mysql/">将excel中的内容存入mysql</a>
+          </li>
+        
+          <li>
+            <a href="/2020/10/15/my_application/20201015_%E4%BB%A3%E7%A0%81%E9%9B%A8/">用python实现代码雨（电影黑客帝国里的效果，代码可直接运行）</a>
+          </li>
+        
+          <li>
+            <a href="/2020/09/29/spider/20200929_%E4%B8%89%E7%A7%8D%E5%8A%A0%E5%AF%86%E6%96%B9%E5%BC%8F/">三种加密方式 sha1加密、MD5加密、Base64加密 (附H5源码和js源码)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/07/15/spider/scrapy/20200715_%20ajaxcrawl/">scrapy源码12 - ajaxcrawl</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
